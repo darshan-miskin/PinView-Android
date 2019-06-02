@@ -1,9 +1,8 @@
 package com.gne.www.pinviewlibrary;
 
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.gne.www.lib.InputType;
 import com.gne.www.lib.OnPinCompletedListener;

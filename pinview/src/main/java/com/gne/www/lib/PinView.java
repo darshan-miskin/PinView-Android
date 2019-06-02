@@ -4,6 +4,8 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutCompat;
 import android.text.InputFilter;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
@@ -12,12 +14,10 @@ import android.view.Gravity;
 import android.view.MenuItem;
 import android.widget.EditText;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.LinearLayoutCompat;
 
 import java.util.ArrayList;
 
-public class PinView extends LinearLayoutCompat{
+public class PinView extends LinearLayoutCompat {
 
     private Context context;
     private short pinCount=6, inputType= com.gne.www.lib.InputType.TYPE_NUMBER;
