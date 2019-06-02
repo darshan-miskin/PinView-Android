@@ -19,7 +19,6 @@ public class PinTextWatcher implements TextWatcher {
     private boolean isFirst = false, isLast = false;
     private String newTypedString = "", entirePin="";
     private ArrayList<EditText> pinEditTexts=new ArrayList<>();
-    private OnPinCompletedListener onPinCompletedListener;
 
     public PinTextWatcher(AppCompatActivity activity, int currentIndex,ArrayList<EditText> pinEditTexts) {
         this.currentIndex = currentIndex;
@@ -31,10 +30,6 @@ public class PinTextWatcher implements TextWatcher {
             this.isFirst = true;
         else if (currentIndex == pinEditTexts.size()- 1)
             this.isLast = true;
-    }
-
-    void setOnPinCompletedListener(OnPinCompletedListener onPinCompletedListener){
-        this.onPinCompletedListener=onPinCompletedListener;
     }
 
     @Override
@@ -69,8 +64,8 @@ public class PinTextWatcher implements TextWatcher {
 
         if (isAllEditTextsFilled()) {
             pinEditTexts.get(currentIndex).clearFocus();
-            if(onPinCompletedListener!=null){
-                onPinCompletedListener.onPinCompleted(entirePin);
+            if(PinView.onPinCompletionListener!=null){
+                PinView.onPinCompleted(entirePin);
             }
             hideKeyboard();
         }

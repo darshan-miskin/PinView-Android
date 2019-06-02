@@ -17,13 +17,14 @@ import androidx.appcompat.widget.LinearLayoutCompat;
 
 import java.util.ArrayList;
 
-public class PinView extends LinearLayoutCompat {
+public class PinView extends LinearLayoutCompat{
 
     private Context context;
     private short pinCount=6, inputType= com.gne.www.lib.InputType.TYPE_NUMBER;
     private boolean isPassword=false;
     private Drawable background;
     private ArrayList<EditText> pinEditTexts=new ArrayList<>();
+    static OnPinCompletedListener onPinCompletionListener;
 
     public PinView(Context context) {
         super(context);
@@ -100,7 +101,8 @@ public class PinView extends LinearLayoutCompat {
             pinEditText.setMaxLines(1);
             pinEditText.setLines(1);
             pinEditText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(1), new InputFilter.AllCaps()});
-            pinEditText.setBackground(background);
+            if(background!=null)
+                pinEditText.setBackground(background);
             if(isPassword){
                 if(inputType==InputType.TYPE_TEXT)
                     pinEditText.setInputType(android.text.InputType.TYPE_CLASS_TEXT | android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD);
@@ -230,9 +232,15 @@ public class PinView extends LinearLayoutCompat {
         }
     }
 
+    public void setOnPinCompletionListener(OnPinCompletedListener onPinCompletionListener){
+        this.onPinCompletionListener=onPinCompletionListener;
+    }
+
     private int convertDpToPixel(float dp, Context context) {
         return Math.round(dp * ((float) context.getResources().getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT));
     }
 
-
+    public static void onPinCompleted(String entirePin) {
+        onPinCompletionListener.onPinCompleted(entirePin);
+    }
 }

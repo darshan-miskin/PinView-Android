@@ -11,9 +11,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:pinCount="4"
+        app:inputType="number"
+        app:isPassword="false"
         app:pinBackground="@drawable/pin_background"
-        app:inputType="text"
-        app:isPassword="true"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
 

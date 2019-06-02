@@ -1,9 +1,12 @@
 package com.gne.www.pinviewlibrary;
 
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.gne.www.lib.InputType;
+import com.gne.www.lib.OnPinCompletedListener;
 import com.gne.www.lib.PinView;
 
 public class MainActivity extends AppCompatActivity {
@@ -16,8 +19,19 @@ public class MainActivity extends AppCompatActivity {
         PinView pinView=findViewById(R.id.pinview);
 
         pinView.setPinCount(6);
-//        pinView.setText("helllooo");
+        pinView.setText("helllooo");
+        pinView.setPinBackground(getResources().getDrawable(R.drawable.pin_background));
+        pinView.setPassword(false);
+        pinView.getText();
+        pinView.setPinSize(40);
+        pinView.setInputType(InputType.TYPE_TEXT);
 
-//        pinView.setPinBackground(getResources().getDrawable(R.drawable.pin_background));
+        pinView.setOnPinCompletionListener(new OnPinCompletedListener() {
+            @Override
+            public void onPinCompleted(String entirePin) {
+                Toast.makeText(MainActivity.this,"Text Entered",Toast.LENGTH_LONG).show();
+            }
+        });
+
     }
 }
