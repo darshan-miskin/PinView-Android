@@ -1,8 +1,8 @@
 # PinView-Android
 [![](https://jitpack.io/v/darshan-miskin/PinView-Android.svg)](https://jitpack.io/#darshan-miskin/PinView-Android)
 
-![alt text](https://raw.githubusercontent.com/darshan-miskin/PinView-Android/master/imgs/Screenshot2.png)              
-![alt text](https://raw.githubusercontent.com/darshan-miskin/PinView-Android/master/imgs/Screenshot1.png)
+![alt text](https://github.com/darshan-miskin/PinView-Android/blob/master/imgs/GIF_1559495949954.gif?raw=true)
+![alt text](https://github.com/darshan-miskin/PinView-Android/blob/master/imgs/GIF_1559496256548.gif?raw=true)
 
 # Gradle Dependency 
 Add the following in your root build.gradle at the end of repositories:
