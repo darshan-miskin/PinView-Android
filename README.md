@@ -54,7 +54,7 @@ Java:
         pinView.setPinBackground(getResources().getDrawable(R.drawable.pin_background));  //pin style
         pinView.setPassword(false);                  //password flag. If true dotted format will be visible
         pinView.getText();                           //get text from pinview
-        pinView.setPinSize(40);                      //set size of pinview in dp
+        pinView.setPinSize(40);                      //set size of pin in dp
         pinView.setInputType(InputType.TYPE_TEXT);   // or InputType.TYPE_NUMBER
         
         pinView.setOnPinCompletionListener(new OnPinCompletedListener() {
