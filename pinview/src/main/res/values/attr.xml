@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="PinView">
+        <attr name="pinCount" format="integer"/>
+        <attr name="inputType" format="integer">
+            <enum name="text" value="1"/>
+            <enum name="number" value="0"/>
+        </attr>
+        <attr name="isPassword" format="boolean"/>
+
+        <attr name="pinBackground" format="reference"/>
+    </declare-styleable>
+</resources>
