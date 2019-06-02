@@ -1,5 +1,5 @@
 # PinView-Android
-
+[![](https://jitpack.io/v/darshan-miskin/PinView-Android.svg)](https://jitpack.io/#darshan-miskin/PinView-Android)
 
 
 # Gradle Dependency 
@@ -15,7 +15,7 @@ Add the following in your root build.gradle at the end of repositories:
  Add this in your module's build.gradle 
  
 	dependencies {
-	        implementation 'com.github.darshan-miskin:PinView-Android:Tag'
+	        implementation 'com.github.darshan-miskin:PinView-Android:v1.0.1'
 	}
   
   # Features
