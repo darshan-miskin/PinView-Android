@@ -100,6 +100,7 @@ public class PinView extends LinearLayoutCompat{
             pinEditText.setLayoutParams(layoutParams);
             pinEditText.setMaxLines(1);
             pinEditText.setLines(1);
+            pinEditText.setPadding(0,0,0,0);
             pinEditText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(1), new InputFilter.AllCaps()});
             if(background!=null)
                 pinEditText.setBackground(background);
@@ -228,6 +229,8 @@ public class PinView extends LinearLayoutCompat{
             LinearLayoutCompat.LayoutParams layoutParams=new LinearLayoutCompat.
                 LayoutParams(convertDpToPixel(sizeInDp,context),
                     convertDpToPixel(sizeInDp,context)/*,1*/);
+            layoutParams.setMargins(getResources().getDimensionPixelSize(R.dimen.margin_pin_edit_text),getResources().getDimensionPixelSize(R.dimen.margin_pin_edit_text),
+                    getResources().getDimensionPixelSize(R.dimen.margin_pin_edit_text),getResources().getDimensionPixelSize(R.dimen.margin_pin_edit_text));
             pinEditTexts.get(i).setLayoutParams(layoutParams);
         }
     }
