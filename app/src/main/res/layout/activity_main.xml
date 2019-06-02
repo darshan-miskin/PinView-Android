@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         app:pinCount="4"
         app:inputType="number"
-        app:isPassword="false"
+        app:isPassword="true"
         app:pinBackground="@drawable/pin_background"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
