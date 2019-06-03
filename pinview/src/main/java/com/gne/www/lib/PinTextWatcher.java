@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
 
-public class PinTextWatcher implements TextWatcher {
+class PinTextWatcher implements TextWatcher {
 
     private AppCompatActivity activity;
     private int currentIndex;

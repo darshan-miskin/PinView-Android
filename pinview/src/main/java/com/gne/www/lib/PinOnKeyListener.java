@@ -6,7 +6,7 @@ import android.widget.EditText;
 
 import java.util.ArrayList;
 
-public class PinOnKeyListener implements View.OnKeyListener {
+class PinOnKeyListener implements View.OnKeyListener {
 
     private int currentIndex;
     private ArrayList<EditText> pinEditTexts=new ArrayList<>();
