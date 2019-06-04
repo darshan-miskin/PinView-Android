@@ -20,5 +20,5 @@
 # hide the original source file name.
 -renamesourcefileattribute SourceFile
 -allowaccessmodification
--repackageclasses my.library.package.internal
--keep class LibraryActivityName { public protected <methods>; }
+-repackageclasses com.gne.www.internal
+-keep class PinView { public protected <methods>; }
