@@ -19,7 +19,7 @@ Add the following in your root build.gradle at the end of repositories:
  Add this in your module's build.gradle 
  
 	dependencies {
-	        implementation 'com.github.darshan-miskin:PinView-Android:v1.0.5'
+	        implementation 'com.github.darshan-miskin:PinView-Android:v1.0.6'
 	}
   
   # Features
