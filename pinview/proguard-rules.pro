@@ -21,3 +21,4 @@
 -renamesourcefileattribute SourceFile
 -allowaccessmodification
 -repackageclasses my.library.package.internal
+-keep class LibraryActivityName { public protected <methods>; }
