@@ -64,7 +64,7 @@ class PinTextWatcher implements TextWatcher {
             pinEditTexts.get(currentIndex + 1).requestFocus();
 
         if (isAllEditTextsFilled() && !isProcessing) {
-            pinEditTexts.get(currentIndex).clearFocus();
+//            pinEditTexts.get(currentIndex).clearFocus();
             if(PinView.onPinCompletionListener!=null){
                 PinView.onPinCompleted(entirePin);
             }

@@ -119,6 +119,7 @@ public class PinView extends LinearLayoutCompat {
             editTextsArrayList.get(i).addTextChangedListener(pinTextWatcher);
             editTextsArrayList.get(i).setOnKeyListener(new PinOnKeyListener(i, editTextsArrayList));
         }
+        isToggleAdded=false;
         setShowPasswordToggle(showPasswordToggle);
     }
 

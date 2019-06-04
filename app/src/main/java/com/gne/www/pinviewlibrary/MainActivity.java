@@ -24,14 +24,14 @@ public class MainActivity extends AppCompatActivity {
         pinView.setPassword(false);
         pinView.getText();
         pinView.setPinSize(40);
-        pinView.setInputType(InputType.TYPE_TEXT);
+        pinView.setInputType(InputType.TYPE_NUMBER);
         pinView.setShowPasswordToggle(true);
 
         pinView.setOnPinCompletionListener(new OnPinCompletedListener() {
             @Override
             public void onPinCompleted(String entirePin) {
                 Toast.makeText(MainActivity.this,"Text Entered",Toast.LENGTH_LONG).show();
-//                hideKeyboard();
+                hideKeyboard();
                 pinView.setShowPasswordToggle(true);
             }
         });

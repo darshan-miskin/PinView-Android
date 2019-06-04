@@ -13,6 +13,7 @@
         app:pinCount="4"
         app:inputType="number"
         app:isPassword="true"
+        app:showPasswordToggle="true"
         app:pinBackground="@drawable/pin_background"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
