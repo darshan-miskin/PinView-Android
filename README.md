@@ -19,11 +19,12 @@ Add the following in your root build.gradle at the end of repositories:
  Add this in your module's build.gradle 
  
 	dependencies {
-	        implementation 'com.github.darshan-miskin:PinView-Android:v1.0.2'
+	        implementation 'com.github.darshan-miskin:PinView-Android:v1.0.4'
 	}
   
   # Features
   - Supports Paste via clipboard flawlessly.
+  - Password toggle to hide/show text on the go.
   - Easy getText() and setText() methods like a regular EditText.
   - Listener to detect when the pin is completely entered.
   - Styleable pins.
