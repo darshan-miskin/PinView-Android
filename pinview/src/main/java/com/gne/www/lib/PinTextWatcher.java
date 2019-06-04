@@ -17,6 +17,7 @@ class PinTextWatcher implements TextWatcher {
     private AppCompatActivity activity;
     private int currentIndex;
     private boolean isFirst = false, isLast = false;
+    private static boolean isProcessing=false;
     private String newTypedString = "", entirePin="";
     private ArrayList<EditText> pinEditTexts=new ArrayList<>();
 
@@ -62,12 +63,11 @@ class PinTextWatcher implements TextWatcher {
         if (!isLast)
             pinEditTexts.get(currentIndex + 1).requestFocus();
 
-        if (isAllEditTextsFilled()) {
+        if (isAllEditTextsFilled() && !isProcessing) {
             pinEditTexts.get(currentIndex).clearFocus();
             if(PinView.onPinCompletionListener!=null){
                 PinView.onPinCompleted(entirePin);
             }
-            hideKeyboard();
         }
     }
 
@@ -86,11 +86,8 @@ class PinTextWatcher implements TextWatcher {
         return true;
     }
 
-    private void hideKeyboard() {
-        if (activity.getCurrentFocus() != null) {
-            InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(INPUT_METHOD_SERVICE);
-            inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
-        }
+    void setProcessing(boolean isProcessing){
+        this.isProcessing=isProcessing;
     }
 
 }

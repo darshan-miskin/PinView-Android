@@ -7,12 +7,17 @@ import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.text.InputFilter;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.ContextMenu;
 import android.view.Gravity;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.Toast;
 
 
 import java.util.ArrayList;
@@ -20,10 +25,12 @@ import java.util.ArrayList;
 public class PinView extends LinearLayoutCompat {
 
     private Context context;
+    private int sizeInDp=50;
     private short pinCount=6, inputType= com.gne.www.lib.InputType.TYPE_NUMBER;
-    private boolean isPassword=false;
+    private boolean isPassword=false, showPasswordToggle=false;
     private Drawable background;
-    private ArrayList<EditText> pinEditTexts=new ArrayList<>();
+    private ArrayList<EditText> editTextsArrayList =new ArrayList<>();
+    private ArrayList<PinTextWatcher> textWatcherArrayList =new ArrayList<>();
     static OnPinCompletedListener onPinCompletionListener;
 
     public PinView(Context context) {
@@ -40,16 +47,7 @@ public class PinView extends LinearLayoutCompat {
         this.setOrientation(HORIZONTAL);
         this.setGravity(Gravity.CENTER);
 
-        TypedArray a=context.obtainStyledAttributes(attrs,R.styleable.PinView);
-        pinCount=(short)a.getInteger(R.styleable.PinView_pinCount,pinCount);
-        inputType=(short)a.getInteger(R.styleable.PinView_inputType,pinCount);
-        isPassword=a.getBoolean(R.styleable.PinView_isPassword,false);
-
-        if(a.hasValue(R.styleable.PinView_pinBackground)){
-            background=a.getDrawable(R.styleable.PinView_pinBackground);
-        }
-        a.recycle();
-        addPins();
+        setStyleAndPins(attrs);
     }
 
     public PinView(Context context, AttributeSet attrs, int defStyleAttr) {
@@ -58,10 +56,16 @@ public class PinView extends LinearLayoutCompat {
         this.setOrientation(HORIZONTAL);
         this.setGravity(Gravity.CENTER);
 
+        setStyleAndPins(attrs);
+    }
+
+    private void setStyleAndPins(AttributeSet attrs){
+
         TypedArray a=context.obtainStyledAttributes(attrs,R.styleable.PinView);
         pinCount=(short)a.getInteger(R.styleable.PinView_pinCount,pinCount);
         inputType=(short)a.getInteger(R.styleable.PinView_inputType,pinCount);
         isPassword=a.getBoolean(R.styleable.PinView_isPassword,false);
+        showPasswordToggle=a.getBoolean(R.styleable.PinView_showPasswordToggle,false);
 
         if(a.hasValue(R.styleable.PinView_pinBackground)){
             background=a.getDrawable(R.styleable.PinView_pinBackground);
@@ -88,40 +92,48 @@ public class PinView extends LinearLayoutCompat {
 
     private void addPins(){
         this.removeAllViews();
-        pinEditTexts.clear();
+        editTextsArrayList.clear();
         for (int i=0; i<getPinCount(); i++){
-            EditText pinEditText=new EditText(context);
-            pinEditText.setGravity(Gravity.CENTER);
+            EditText editText=new EditText(context);
+            editText.setGravity(Gravity.CENTER);
             LinearLayoutCompat.LayoutParams layoutParams=new LinearLayoutCompat.
                                         LayoutParams(getResources().getDimensionPixelOffset(R.dimen.pin_size),
                                         getResources().getDimensionPixelOffset(R.dimen.pin_size)/*,1*/);
             layoutParams.setMargins(getResources().getDimensionPixelSize(R.dimen.margin_pin_edit_text),getResources().getDimensionPixelSize(R.dimen.margin_pin_edit_text),
                     getResources().getDimensionPixelSize(R.dimen.margin_pin_edit_text),getResources().getDimensionPixelSize(R.dimen.margin_pin_edit_text));
-            pinEditText.setLayoutParams(layoutParams);
-            pinEditText.setMaxLines(1);
-            pinEditText.setLines(1);
-            pinEditText.setPadding(0,0,0,0);
-            pinEditText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(1), new InputFilter.AllCaps()});
+            editText.setLayoutParams(layoutParams);
+            editText.setMaxLines(1);
+            editText.setLines(1);
+            editText.setPadding(0,0,0,0);
+            editText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(1), new InputFilter.AllCaps()});
             if(background!=null)
-                pinEditText.setBackground(background);
-            if(isPassword){
-                if(inputType==InputType.TYPE_TEXT)
-                    pinEditText.setInputType(android.text.InputType.TYPE_CLASS_TEXT | android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                else
-                    pinEditText.setInputType(android.text.InputType.TYPE_CLASS_NUMBER | android.text.InputType.TYPE_NUMBER_VARIATION_PASSWORD);
-            }
-            else {
-                if (inputType == InputType.TYPE_TEXT)
-                    pinEditText.setInputType(android.text.InputType.TYPE_CLASS_TEXT);
-                else
-                    pinEditText.setInputType(android.text.InputType.TYPE_CLASS_NUMBER);
-            }
-            pinEditTexts.add(pinEditText);
-            this.addView(pinEditText);
+                editText.setBackground(background);
+            setPasswordType(editText);
+            editTextsArrayList.add(editText);
+            this.addView(editText);
         }
-        for (int i=0; i<pinEditTexts.size(); i++){
-            pinEditTexts.get(i).addTextChangedListener(new PinTextWatcher((AppCompatActivity) context,i, pinEditTexts));
-            pinEditTexts.get(i).setOnKeyListener(new PinOnKeyListener(i,pinEditTexts));
+        textWatcherArrayList.clear();
+        for (int i = 0; i< getPinCount(); i++){
+            PinTextWatcher pinTextWatcher=new PinTextWatcher((AppCompatActivity) context,i, editTextsArrayList);
+            textWatcherArrayList.add(pinTextWatcher);
+            editTextsArrayList.get(i).addTextChangedListener(pinTextWatcher);
+            editTextsArrayList.get(i).setOnKeyListener(new PinOnKeyListener(i, editTextsArrayList));
+        }
+        setShowPasswordToggle(showPasswordToggle);
+    }
+
+    private void setPasswordType(EditText editText){
+        if(isPassword){
+            if(inputType==InputType.TYPE_TEXT)
+                editText.setInputType(android.text.InputType.TYPE_CLASS_TEXT | android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD);
+            else
+                editText.setInputType(android.text.InputType.TYPE_CLASS_NUMBER | android.text.InputType.TYPE_NUMBER_VARIATION_PASSWORD);
+        }
+        else {
+            if (inputType == InputType.TYPE_TEXT)
+                editText.setInputType(android.text.InputType.TYPE_CLASS_TEXT);
+            else
+                editText.setInputType(android.text.InputType.TYPE_CLASS_NUMBER);
         }
     }
 
@@ -136,7 +148,7 @@ public class PinView extends LinearLayoutCompat {
     public String getText(){
         String text="";
         for (int i=0; i<getPinCount(); i++){
-            text+=pinEditTexts.get(i).getText().toString();
+            text+= editTextsArrayList.get(i).getText().toString();
         }
         return text;
     }
@@ -149,7 +161,7 @@ public class PinView extends LinearLayoutCompat {
         short validLength=(short) text.length();
         if(validLength>=getPinCount()) validLength=getPinCount();
         for (int i=0; i<validLength; i++){
-            pinEditTexts.get(i).setText(Character.toString(text.charAt(i)));
+            editTextsArrayList.get(i).setText(Character.toString(text.charAt(i)));
         }
     }
 
@@ -173,15 +185,15 @@ public class PinView extends LinearLayoutCompat {
         for (int i=0; i<getPinCount(); i++){
             if(inputType==InputType.TYPE_TEXT) {
                 if(isPassword)
-                    pinEditTexts.get(i).setInputType(android.text.InputType.TYPE_CLASS_TEXT | android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    editTextsArrayList.get(i).setInputType(android.text.InputType.TYPE_CLASS_TEXT | android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD);
                 else
-                    pinEditTexts.get(i).setInputType(android.text.InputType.TYPE_CLASS_TEXT);
+                    editTextsArrayList.get(i).setInputType(android.text.InputType.TYPE_CLASS_TEXT);
             }
             else {
                 if(isPassword)
-                    pinEditTexts.get(i).setInputType(android.text.InputType.TYPE_CLASS_NUMBER| android.text.InputType.TYPE_NUMBER_VARIATION_PASSWORD);
+                    editTextsArrayList.get(i).setInputType(android.text.InputType.TYPE_CLASS_NUMBER| android.text.InputType.TYPE_NUMBER_VARIATION_PASSWORD);
                 else
-                    pinEditTexts.get(i).setInputType(android.text.InputType.TYPE_CLASS_NUMBER);
+                    editTextsArrayList.get(i).setInputType(android.text.InputType.TYPE_CLASS_NUMBER);
             }
         }
     }
@@ -197,9 +209,9 @@ public class PinView extends LinearLayoutCompat {
         if(isPassword){
             for (int i=0; i<getPinCount(); i++) {
                 if (inputType == InputType.TYPE_NUMBER)
-                    pinEditTexts.get(i).setInputType(android.text.InputType.TYPE_CLASS_NUMBER | android.text.InputType.TYPE_NUMBER_VARIATION_PASSWORD);
+                    editTextsArrayList.get(i).setInputType(android.text.InputType.TYPE_CLASS_NUMBER | android.text.InputType.TYPE_NUMBER_VARIATION_PASSWORD);
                 else
-                    pinEditTexts.get(i).setInputType(android.text.InputType.TYPE_CLASS_TEXT | android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    editTextsArrayList.get(i).setInputType(android.text.InputType.TYPE_CLASS_TEXT | android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD);
             }
         }
         else {
@@ -215,7 +227,7 @@ public class PinView extends LinearLayoutCompat {
     public void setPinBackground(Drawable backgroundDrawable){
         background=backgroundDrawable;
         for (int i=0; i<getPinCount(); i++) {
-            pinEditTexts.get(i).setBackground(background);
+            editTextsArrayList.get(i).setBackground(background);
         }
     }
 
@@ -224,6 +236,7 @@ public class PinView extends LinearLayoutCompat {
      * @param sizeInDp Width of the individual pin. Is also applied to height.
      */
     public void setPinSize(int sizeInDp){
+        this.sizeInDp=sizeInDp;
 
         for (int i=0; i<getPinCount(); i++) {
             LinearLayoutCompat.LayoutParams layoutParams=new LinearLayoutCompat.
@@ -231,7 +244,59 @@ public class PinView extends LinearLayoutCompat {
                     convertDpToPixel(sizeInDp,context)/*,1*/);
             layoutParams.setMargins(getResources().getDimensionPixelSize(R.dimen.margin_pin_edit_text),getResources().getDimensionPixelSize(R.dimen.margin_pin_edit_text),
                     getResources().getDimensionPixelSize(R.dimen.margin_pin_edit_text),getResources().getDimensionPixelSize(R.dimen.margin_pin_edit_text));
-            pinEditTexts.get(i).setLayoutParams(layoutParams);
+            editTextsArrayList.get(i).setLayoutParams(layoutParams);
+        }
+    }
+
+    public void setShowPasswordToggle(boolean showPasswordToggle){
+        this.showPasswordToggle=showPasswordToggle;
+
+        if(showPasswordToggle)isPassword=showPasswordToggle;
+
+        if(showPasswordToggle){
+
+            textWatcherArrayList.get(0).setProcessing(true);
+            setPassword(isPassword);
+            textWatcherArrayList.get(getPinCount()-1).setProcessing(false);
+            isPassword=!isPassword;
+
+            EditText editText=new EditText(context);
+            editText.setFocusable(false);
+            editText.setInputType(android.text.InputType.TYPE_NULL);
+            editText.setBackground(getResources().getDrawable(R.drawable.ic_show));
+            LinearLayoutCompat.LayoutParams layoutParams=new LinearLayoutCompat.
+                    LayoutParams(convertDpToPixel(30, context),
+                    convertDpToPixel(27, context)/*,1*/);
+            layoutParams.setMargins(convertDpToPixel(4,context),getResources().getDimensionPixelSize(R.dimen.margin_pin_edit_text),
+                    getResources().getDimensionPixelSize(R.dimen.margin_pin_edit_text),getResources().getDimensionPixelSize(R.dimen.margin_pin_edit_text));
+            editText.setLayoutParams(layoutParams);
+            editText.setPadding(4,4,4,4);
+            editTextsArrayList.add(editText);
+
+            editTextsArrayList.get(getPinCount()).setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    textWatcherArrayList.get(0).setProcessing(true);
+                    for (int i=0; i<getPinCount(); i++) {
+                        setPasswordType(editTextsArrayList.get(i));
+                    }
+                    textWatcherArrayList.get(getPinCount()-1).setProcessing(false);
+                    if(isPassword){
+                        editTextsArrayList.get(editTextsArrayList.size()-1).setBackground(getResources().getDrawable(R.drawable.ic_show));
+                    }
+                    else {
+                        editTextsArrayList.get(editTextsArrayList.size()-1).setBackground(getResources().getDrawable(R.drawable.ic_hide));
+                    }
+                    isPassword=!isPassword;
+                }
+            });
+            this.addView(editText);
+        }
+        else {
+            if(editTextsArrayList.size()>getPinCount()) {
+                editTextsArrayList.remove(getPinCount());
+                this.removeViewAt(getPinCount());
+            }
         }
     }
 

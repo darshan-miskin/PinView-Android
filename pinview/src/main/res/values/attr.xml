@@ -7,6 +7,7 @@
             <enum name="number" value="0"/>
         </attr>
         <attr name="isPassword" format="boolean"/>
+        <attr name="showPasswordToggle" format="boolean"/>
 
         <attr name="pinBackground" format="reference"/>
     </declare-styleable>
