@@ -3,8 +3,8 @@
 
 <!--![alt text](https://github.com/darshan-miskin/PinView-Android/blob/master/imgs/GIF_1559495949954.gif?&v=1024&s=576)
 ![alt text](https://github.com/darshan-miskin/PinView-Android/blob/master/imgs/GIF_1559496256548.gif?&=1024×576)-->
-<img src="https://github.com/darshan-miskin/PinView-Android/blob/master/imgs/GIF_1559495949954.gif??" width="300" height="600">
-<img src="https://github.com/darshan-miskin/PinView-Android/blob/master/imgs/GIF_1559496256548.gif?" width="300" height="600">
+<img src="https://github.com/darshan-miskin/PinView-Android/blob/master/imgs/GIF_1559678274670.gif?" width="300" height="600">
+<img src="https://github.com/darshan-miskin/PinView-Android/blob/master/imgs/GIF_1559495949954.gif?" width="300" height="600">
 
 # Gradle Dependency 
 Add the following in your root build.gradle at the end of repositories:
@@ -19,7 +19,7 @@ Add the following in your root build.gradle at the end of repositories:
  Add this in your module's build.gradle 
  
 	dependencies {
-	        implementation 'com.github.darshan-miskin:PinView-Android:v1.0.4'
+	        implementation 'com.github.darshan-miskin:PinView-Android:v1.0.5'
 	}
   
   # Features
@@ -41,11 +41,12 @@ Add the following in your root build.gradle at the end of repositories:
         app:pinCount="4"
         app:inputType="number"
         app:isPassword="false"
+        app:showPasswordToggle="true"
         app:pinBackground="@drawable/pin_background"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
         
-Java: 
+  Java: 
 
 
         PinView pinView=findViewById(R.id.pinview);
@@ -57,6 +58,7 @@ Java:
         pinView.getText();                           //get text from pinview
         pinView.setPinSize(40);                      //set size of pin in dp
         pinView.setInputType(InputType.TYPE_TEXT);   // or InputType.TYPE_NUMBER
+        pinView.setShowPasswordToggle(true);         //make the password toggle visible
         
         pinView.setOnPinCompletionListener(new OnPinCompletedListener() {
             @Override
