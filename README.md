@@ -3,8 +3,8 @@
 
 <!--![alt text](https://github.com/darshan-miskin/PinView-Android/blob/master/imgs/GIF_1559495949954.gif?&v=1024&s=576)
 ![alt text](https://github.com/darshan-miskin/PinView-Android/blob/master/imgs/GIF_1559496256548.gif?&=1024×576)-->
-<img src="https://github.com/darshan-miskin/PinView-Android/blob/master/imgs/GIF_1559495949954.gif??" width="300" height="600">
-<img src="https://github.com/darshan-miskin/PinView-Android/blob/master/imgs/GIF_1559496256548.gif?" width="300" height="600">
+<img src="https://github.com/darshan-miskin/PinView-Android/blob/master/imgs/GIF_1559678274670.gif?" width="300" height="600">
+<img src="https://github.com/darshan-miskin/PinView-Android/blob/master/imgs/GIF_1559495949954.gif?" width="300" height="600">
 
 # Gradle Dependency 
 Add the following in your root build.gradle at the end of repositories:
