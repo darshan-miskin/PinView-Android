@@ -24,6 +24,7 @@ Add the following in your root build.gradle at the end of repositories:
   
   # Features
   - Supports Paste via clipboard flawlessly.
+  - Password toggle to hide/show text on the go.
   - Easy getText() and setText() methods like a regular EditText.
   - Listener to detect when the pin is completely entered.
   - Styleable pins.
