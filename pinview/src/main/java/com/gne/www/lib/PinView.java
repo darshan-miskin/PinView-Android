@@ -27,7 +27,7 @@ public class PinView extends LinearLayoutCompat {
     private Context context;
     private int sizeInDp=50;
     private short pinCount=6, inputType= com.gne.www.lib.InputType.TYPE_NUMBER;
-    private boolean isPassword=false, showPasswordToggle=false;
+    private boolean isPassword=false, showPasswordToggle=false, isToggleAdded=false;
     private Drawable background;
     private ArrayList<EditText> editTextsArrayList =new ArrayList<>();
     private ArrayList<PinTextWatcher> textWatcherArrayList =new ArrayList<>();
@@ -271,31 +271,34 @@ public class PinView extends LinearLayoutCompat {
                     getResources().getDimensionPixelSize(R.dimen.margin_pin_edit_text),getResources().getDimensionPixelSize(R.dimen.margin_pin_edit_text));
             editText.setLayoutParams(layoutParams);
             editText.setPadding(4,4,4,4);
-            editTextsArrayList.add(editText);
+            if(!isToggleAdded) {
+                editTextsArrayList.add(editText);
 
-            editTextsArrayList.get(getPinCount()).setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    textWatcherArrayList.get(0).setProcessing(true);
-                    for (int i=0; i<getPinCount(); i++) {
-                        setPasswordType(editTextsArrayList.get(i));
+                editTextsArrayList.get(getPinCount()).setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        textWatcherArrayList.get(0).setProcessing(true);
+                        for (int i = 0; i < getPinCount(); i++) {
+                            setPasswordType(editTextsArrayList.get(i));
+                        }
+                        textWatcherArrayList.get(getPinCount() - 1).setProcessing(false);
+                        if (isPassword) {
+                            editTextsArrayList.get(editTextsArrayList.size() - 1).setBackground(getResources().getDrawable(R.drawable.ic_show));
+                        } else {
+                            editTextsArrayList.get(editTextsArrayList.size() - 1).setBackground(getResources().getDrawable(R.drawable.ic_hide));
+                        }
+                        isPassword = !isPassword;
                     }
-                    textWatcherArrayList.get(getPinCount()-1).setProcessing(false);
-                    if(isPassword){
-                        editTextsArrayList.get(editTextsArrayList.size()-1).setBackground(getResources().getDrawable(R.drawable.ic_show));
-                    }
-                    else {
-                        editTextsArrayList.get(editTextsArrayList.size()-1).setBackground(getResources().getDrawable(R.drawable.ic_hide));
-                    }
-                    isPassword=!isPassword;
-                }
-            });
-            this.addView(editText);
+                });
+                this.addView(editText);
+                isToggleAdded=true;
+            }
         }
         else {
             if(editTextsArrayList.size()>getPinCount()) {
                 editTextsArrayList.remove(getPinCount());
                 this.removeViewAt(getPinCount());
+                isToggleAdded=false;
             }
         }
     }
