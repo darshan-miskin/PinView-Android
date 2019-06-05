@@ -59,6 +59,8 @@ Add the following in your root build.gradle at the end of repositories:
         pinView.setPinSize(40);                      //set size of pin in dp
         pinView.setInputType(InputType.TYPE_TEXT);   // or InputType.TYPE_NUMBER
         pinView.setShowPasswordToggle(true);         //make the password toggle visible
+        pinView.requestPinFocus();                   //request focus at zeroth position pin
+        pinView.requestPinFocus(4);                  //request focus on pin at 4th index, defaults to zeroth if invalid index
         
         pinView.setOnPinCompletionListener(new OnPinCompletedListener() {
             @Override
