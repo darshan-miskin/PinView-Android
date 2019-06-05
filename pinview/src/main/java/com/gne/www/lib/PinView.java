@@ -60,6 +60,7 @@ public class PinView extends LinearLayoutCompat {
         setStyleAndPins(attrs);
     }
 
+
     private void setStyleAndPins(AttributeSet attrs){
 
         TypedArray a=context.obtainStyledAttributes(attrs,R.styleable.PinView);
