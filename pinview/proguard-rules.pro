@@ -18,7 +18,7 @@
 
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
--renamesourcefileattribute SourceFile
--allowaccessmodification
--repackageclasses com.gne.www.internal
--keep class PinView { public protected <methods>; }
+#-renamesourcefileattribute SourceFile
+#-allowaccessmodification
+#-repackageclasses com.gne.www.internal
+#-keep class PinView { public protected <methods>; }
