@@ -3,6 +3,7 @@ package com.gne.www.lib;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutCompat;
@@ -121,6 +122,7 @@ public class PinView extends LinearLayoutCompat {
         }
         isToggleAdded=false;
         setShowPasswordToggle(showPasswordToggle);
+//        requestPinFocus();
     }
 
     private void setPasswordType(EditText editText){
@@ -207,6 +209,7 @@ public class PinView extends LinearLayoutCompat {
     public void setPassword(boolean isPassword){
         this.isPassword=isPassword;
 
+        textWatcherArrayList.get(0).setProcessing(true);
         if(isPassword){
             for (int i=0; i<getPinCount(); i++) {
                 if (inputType == InputType.TYPE_NUMBER)
@@ -218,6 +221,8 @@ public class PinView extends LinearLayoutCompat {
         else {
             setInputType(inputType);
         }
+
+        textWatcherArrayList.get(getPinCount()-1).setProcessing(false);
     }
 
     /**
@@ -249,6 +254,10 @@ public class PinView extends LinearLayoutCompat {
         }
     }
 
+    /**
+     * Enable or disable password toggle
+     * @param showPasswordToggle boolean value
+     */
     public void setShowPasswordToggle(boolean showPasswordToggle){
         this.showPasswordToggle=showPasswordToggle;
 
@@ -256,9 +265,7 @@ public class PinView extends LinearLayoutCompat {
 
         if(showPasswordToggle){
 
-            textWatcherArrayList.get(0).setProcessing(true);
             setPassword(isPassword);
-            textWatcherArrayList.get(getPinCount()-1).setProcessing(false);
             isPassword=!isPassword;
 
             EditText editText=new EditText(context);
@@ -304,6 +311,10 @@ public class PinView extends LinearLayoutCompat {
         }
     }
 
+    /**
+     * Set a listener to detect when all the pins are filled
+     * @param onPinCompletionListener instance of OnPinCompletionListener
+     */
     public void setOnPinCompletionListener(OnPinCompletedListener onPinCompletionListener){
         this.onPinCompletionListener=onPinCompletionListener;
     }
@@ -312,7 +323,25 @@ public class PinView extends LinearLayoutCompat {
         return Math.round(dp * ((float) context.getResources().getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT));
     }
 
-    public static void onPinCompleted(String entirePin) {
+    static void onPinCompleted(String entirePin) {
         onPinCompletionListener.onPinCompleted(entirePin);
+    }
+
+    /**
+     * Requests focus on the pin at index zero
+     */
+    public void requestPinFocus(){
+        editTextsArrayList.get(0).requestFocus();
+    }
+
+    /**
+     * Request focus on the pin at specified index, if index is invalid defaults to zeroth pin
+     * @param index index of the pin
+     */
+    public void requestPinFocus(int index){
+        if(index>0 && index<getPinCount())
+            editTextsArrayList.get(index).requestFocus();
+        else
+            editTextsArrayList.get(0).requestFocus();
     }
 }

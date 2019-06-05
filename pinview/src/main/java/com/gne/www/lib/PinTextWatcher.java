@@ -53,10 +53,11 @@ class PinTextWatcher implements TextWatcher {
         pinEditTexts.get(currentIndex).setSelection(text.length());
         pinEditTexts.get(currentIndex).addTextChangedListener(this);
 
-        if (text.length() >= 1)
-            moveToNext();
-        else
-            moveToPrevious();
+        if(!isProcessing)
+            if (text.length() >= 1)
+                moveToNext();
+            else
+                moveToPrevious();
     }
 
     private void moveToNext() {
