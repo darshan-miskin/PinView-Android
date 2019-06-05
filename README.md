@@ -4,7 +4,7 @@
 <!--![alt text](https://github.com/darshan-miskin/PinView-Android/blob/master/imgs/GIF_1559495949954.gif?&v=1024&s=576)
 ![alt text](https://github.com/darshan-miskin/PinView-Android/blob/master/imgs/GIF_1559496256548.gif?&=1024×576)-->
 <img src="https://github.com/darshan-miskin/PinView-Android/blob/master/imgs/GIF_1559730765454.gif?" width="300" height="400">
-<img src="https://github.com/darshan-miskin/PinView-Android/blob/master/imgs/GIF_1559731797610.gif?" width="300" height="450">
+<img src="https://github.com/darshan-miskin/PinView-Android/blob/master/imgs/GIF_1559731797610.gif?" width="300" height="500">
 
 # Gradle Dependency 
 Add the following in your root build.gradle at the end of repositories:
