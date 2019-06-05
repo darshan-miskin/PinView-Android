@@ -3,8 +3,7 @@
 
 <!--![alt text](https://github.com/darshan-miskin/PinView-Android/blob/master/imgs/GIF_1559495949954.gif?&v=1024&s=576)
 ![alt text](https://github.com/darshan-miskin/PinView-Android/blob/master/imgs/GIF_1559496256548.gif?&=1024×576)-->
-<img src="https://github.com/darshan-miskin/PinView-Android/blob/master/imgs/GIF_1559730765454.gif?" width="300" height="400">
-<img src="https://github.com/darshan-miskin/PinView-Android/blob/master/imgs/GIF_1559731797610.gif?" width="300" height="475">
+<img src="https://raw.githubusercontent.com/darshan-miskin/storage/master/GIF_1559739241294.gif" width="250" height="500">  <img src="https://raw.githubusercontent.com/darshan-miskin/storage/master/GIF_1559739158795.gif" width="250" height="500">
 
 # Gradle Dependency 
 Add the following in your root build.gradle at the end of repositories:
@@ -59,6 +58,8 @@ Add the following in your root build.gradle at the end of repositories:
         pinView.setPinSize(40);                      //set size of pin in dp
         pinView.setInputType(InputType.TYPE_TEXT);   // or InputType.TYPE_NUMBER
         pinView.setShowPasswordToggle(true);         //make the password toggle visible
+        pinView.requestPinFocus();                   //request focus at zeroth position pin
+        pinView.requestPinFocus(4);                  //request focus on pin at 4th index, defaults to zeroth if invalid index
         
         pinView.setOnPinCompletionListener(new OnPinCompletedListener() {
             @Override
