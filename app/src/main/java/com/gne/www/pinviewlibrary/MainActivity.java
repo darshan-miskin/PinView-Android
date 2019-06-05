@@ -19,13 +19,14 @@ public class MainActivity extends AppCompatActivity {
         final PinView pinView=findViewById(R.id.pinview);
 
         pinView.setPinCount(6);
-//        pinView.setText("helllooo");
+        pinView.setText("helllooo");
         pinView.setPinBackground(getResources().getDrawable(R.drawable.pin_background));
         pinView.setPassword(false);
         pinView.getText();
         pinView.setPinSize(40);
         pinView.setInputType(InputType.TYPE_TEXT);
         pinView.setShowPasswordToggle(false);
+        pinView.requestPinFocus();
 
         pinView.setOnPinCompletionListener(new OnPinCompletedListener() {
             @Override
