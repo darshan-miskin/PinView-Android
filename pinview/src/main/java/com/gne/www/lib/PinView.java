@@ -3,31 +3,31 @@ package com.gne.www.lib;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Rect;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.text.InputFilter;
-import android.text.method.HideReturnsTransformationMethod;
-import android.text.method.PasswordTransformationMethod;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.ContextMenu;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.Toast;
 
 
 import java.util.ArrayList;
 
 public class PinView extends LinearLayoutCompat {
 
+    private final float DEFAULT_PIN_TEXT_SIZE=23;
+    private final int DEFAULT_PIN_COUNT=6;
     private Context context;
-    private int sizeInDp=50;
-    private short pinCount=6, inputType= com.gne.www.lib.InputType.TYPE_NUMBER;
+    private String pinText="";
+    private int pinSize =getResources().getDimensionPixelSize(R.dimen.pin_size), passwordToggleSize=getResources().getDimensionPixelSize(R.dimen.password_toggle_size);
+    private int passwordToggleColor=getResources().getColor(android.R.color.black);
+    private float pinTextSize=DEFAULT_PIN_TEXT_SIZE;
+    private short pinCount=DEFAULT_PIN_COUNT, inputType= com.gne.www.lib.InputType.TYPE_NUMBER;
     private boolean isPassword=false, showPasswordToggle=false, isToggleAdded=false;
     private Drawable background;
     private ArrayList<EditText> editTextsArrayList =new ArrayList<>();
@@ -64,10 +64,16 @@ public class PinView extends LinearLayoutCompat {
     private void setStyleAndPins(AttributeSet attrs){
 
         TypedArray a=context.obtainStyledAttributes(attrs,R.styleable.PinView);
-        pinCount=(short)a.getInteger(R.styleable.PinView_pinCount,pinCount);
-        inputType=(short)a.getInteger(R.styleable.PinView_inputType,pinCount);
+        pinCount=(short)a.getInteger(R.styleable.PinView_pinCount,DEFAULT_PIN_COUNT);
+        inputType=(short)a.getInteger(R.styleable.PinView_inputType,InputType.TYPE_TEXT);
         isPassword=a.getBoolean(R.styleable.PinView_isPassword,false);
         showPasswordToggle=a.getBoolean(R.styleable.PinView_showPasswordToggle,false);
+        pinSize =a.getDimensionPixelSize(R.styleable.PinView_pinSize,pinSize);
+
+        pinText =a.getString(R.styleable.PinView_pinText);
+        pinTextSize =a.getDimension(R.styleable.PinView_pinTextSize,DEFAULT_PIN_TEXT_SIZE);
+        passwordToggleSize =a.getDimensionPixelSize(R.styleable.PinView_passwordToggleSize,passwordToggleSize);
+        passwordToggleColor =a.getColor(R.styleable.PinView_passwordToggleColor,passwordToggleColor);
 
         if(a.hasValue(R.styleable.PinView_pinBackground)){
             background=a.getDrawable(R.styleable.PinView_pinBackground);
@@ -99,11 +105,11 @@ public class PinView extends LinearLayoutCompat {
             EditText editText=new EditText(context);
             editText.setGravity(Gravity.CENTER);
             LinearLayoutCompat.LayoutParams layoutParams=new LinearLayoutCompat.
-                                        LayoutParams(getResources().getDimensionPixelOffset(R.dimen.pin_size),
-                                        getResources().getDimensionPixelOffset(R.dimen.pin_size)/*,1*/);
+                                        LayoutParams(pinSize, pinSize/*,1*/);
             layoutParams.setMargins(getResources().getDimensionPixelSize(R.dimen.margin_pin_edit_text),getResources().getDimensionPixelSize(R.dimen.margin_pin_edit_text),
                     getResources().getDimensionPixelSize(R.dimen.margin_pin_edit_text),getResources().getDimensionPixelSize(R.dimen.margin_pin_edit_text));
             editText.setLayoutParams(layoutParams);
+            editText.setTextSize(pinTextSize);
             editText.setMaxLines(1);
             editText.setLines(1);
             editText.setPadding(0,0,0,0);
@@ -116,12 +122,13 @@ public class PinView extends LinearLayoutCompat {
         }
         textWatcherArrayList.clear();
         for (int i = 0; i< getPinCount(); i++){
-            PinTextWatcher pinTextWatcher=new PinTextWatcher((AppCompatActivity) context,i, editTextsArrayList);
+            PinTextWatcher pinTextWatcher=new PinTextWatcher(i, editTextsArrayList);
             textWatcherArrayList.add(pinTextWatcher);
             editTextsArrayList.get(i).addTextChangedListener(pinTextWatcher);
             editTextsArrayList.get(i).setOnKeyListener(new PinOnKeyListener(i, editTextsArrayList));
         }
         isToggleAdded=false;
+        setText(pinText);
         setShowPasswordToggle(showPasswordToggle);
 //        requestPinFocus();
     }
@@ -223,6 +230,19 @@ public class PinView extends LinearLayoutCompat {
             setInputType(inputType);
         }
 
+        if(isToggleAdded) {
+            if (isPassword) {
+                Drawable drawable=getResources().getDrawable(R.drawable.ic_show);
+                drawable.setColorFilter(passwordToggleColor, PorterDuff.Mode.SRC_IN);
+                editTextsArrayList.get(editTextsArrayList.size() - 1).setBackground(drawable);
+            } else {
+                Drawable drawable=getResources().getDrawable(R.drawable.ic_hide);
+                drawable.setColorFilter(passwordToggleColor, PorterDuff.Mode.SRC_IN);
+                editTextsArrayList.get(editTextsArrayList.size() - 1).setBackground(drawable);
+            }
+            this.isPassword=!this.isPassword;
+
+        }
         textWatcherArrayList.get(getPinCount()-1).setProcessing(false);
     }
 
@@ -243,7 +263,7 @@ public class PinView extends LinearLayoutCompat {
      * @param sizeInDp Width of the individual pin. Is also applied to height.
      */
     public void setPinSize(int sizeInDp){
-        this.sizeInDp=sizeInDp;
+        this.pinSize =sizeInDp;
 
         for (int i=0; i<getPinCount(); i++) {
             LinearLayoutCompat.LayoutParams layoutParams=new LinearLayoutCompat.
@@ -272,10 +292,13 @@ public class PinView extends LinearLayoutCompat {
             EditText editText=new EditText(context);
             editText.setFocusable(false);
             editText.setInputType(android.text.InputType.TYPE_NULL);
-            editText.setBackground(getResources().getDrawable(R.drawable.ic_show));
+            Drawable drawable=getResources().getDrawable(R.drawable.ic_show);
+            drawable.setColorFilter(passwordToggleColor, PorterDuff.Mode.SRC_IN);
+            editText.setBackground(drawable);
+            int height=(int)Math.round(passwordToggleSize-(passwordToggleSize*.10));
             LinearLayoutCompat.LayoutParams layoutParams=new LinearLayoutCompat.
-                    LayoutParams(convertDpToPixel(30, context),
-                    convertDpToPixel(27, context)/*,1*/);
+                    LayoutParams(passwordToggleSize,
+                    height/*,1*/);
             layoutParams.setMargins(convertDpToPixel(4,context),getResources().getDimensionPixelSize(R.dimen.margin_pin_edit_text),
                     getResources().getDimensionPixelSize(R.dimen.margin_pin_edit_text),getResources().getDimensionPixelSize(R.dimen.margin_pin_edit_text));
             editText.setLayoutParams(layoutParams);
@@ -292,9 +315,13 @@ public class PinView extends LinearLayoutCompat {
                         }
                         textWatcherArrayList.get(getPinCount() - 1).setProcessing(false);
                         if (isPassword) {
-                            editTextsArrayList.get(editTextsArrayList.size() - 1).setBackground(getResources().getDrawable(R.drawable.ic_show));
+                            Drawable drawable=getResources().getDrawable(R.drawable.ic_show);
+                            drawable.setColorFilter(passwordToggleColor, PorterDuff.Mode.SRC_IN);
+                            editTextsArrayList.get(editTextsArrayList.size() - 1).setBackground(drawable);
                         } else {
-                            editTextsArrayList.get(editTextsArrayList.size() - 1).setBackground(getResources().getDrawable(R.drawable.ic_hide));
+                            Drawable drawable=getResources().getDrawable(R.drawable.ic_hide);
+                            drawable.setColorFilter(passwordToggleColor, PorterDuff.Mode.SRC_IN);
+                            editTextsArrayList.get(editTextsArrayList.size() - 1).setBackground(drawable);
                         }
                         isPassword = !isPassword;
                     }

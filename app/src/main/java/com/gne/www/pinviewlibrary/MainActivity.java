@@ -21,11 +21,11 @@ public class MainActivity extends AppCompatActivity {
         pinView.setPinCount(6);
 //        pinView.setText("helllooo");
         pinView.setPinBackground(getResources().getDrawable(R.drawable.pin_background));
-        pinView.setPassword(false);
         pinView.getText();
         pinView.setPinSize(40);
         pinView.setInputType(InputType.TYPE_NUMBER);
         pinView.setShowPasswordToggle(true);
+        pinView.setPassword(true);
 //        pinView.requestPinFocus();
 
         pinView.setOnPinCompletionListener(new OnPinCompletedListener() {

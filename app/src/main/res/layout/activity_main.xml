@@ -10,11 +10,17 @@
         android:id="@+id/pinview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:pinCount="4"
+        app:pinCount="5"
         app:inputType="number"
-        app:isPassword="true"
+        app:isPassword="false"
+        app:pinText="Hello"
         app:showPasswordToggle="true"
         app:pinBackground="@drawable/pin_background"
+
+        app:pinSize="30dp"
+        app:passwordToggleSize="26dp"
+        app:passwordToggleColor="@color/colorAccent"
+
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
 

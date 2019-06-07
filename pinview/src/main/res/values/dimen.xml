@@ -2,4 +2,5 @@
 <resources>
     <dimen name="margin_pin_edit_text">4dp</dimen>
     <dimen name="pin_size">50dp</dimen>
+    <dimen name="password_toggle_size">30dp</dimen>
 </resources>

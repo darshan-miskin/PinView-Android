@@ -14,16 +14,14 @@ import static android.content.Context.INPUT_METHOD_SERVICE;
 
 class PinTextWatcher implements TextWatcher {
 
-    private AppCompatActivity activity;
     private int currentIndex;
     private boolean isFirst = false, isLast = false;
     private static boolean isProcessing=false;
     private String newTypedString = "", entirePin="";
     private ArrayList<EditText> pinEditTexts=new ArrayList<>();
 
-    public PinTextWatcher(AppCompatActivity activity, int currentIndex,ArrayList<EditText> pinEditTexts) {
+    public PinTextWatcher( int currentIndex,ArrayList<EditText> pinEditTexts) {
         this.currentIndex = currentIndex;
-        this.activity=activity;
         this.pinEditTexts.clear();
         this.pinEditTexts.addAll(pinEditTexts);
 
