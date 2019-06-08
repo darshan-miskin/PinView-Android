@@ -372,4 +372,43 @@ public class PinView extends LinearLayoutCompat {
         else
             editTextsArrayList.get(0).requestFocus();
     }
+
+    /**
+     * Textsize of the pins
+     * @param textSize size in sp
+     */
+    public void setPinTextSize(float textSize){
+        pinTextSize=textSize;
+        for (int i=0; i<getPinCount(); i++){
+            editTextsArrayList.get(i).setTextSize(pinTextSize);
+        }
+    }
+
+    /**
+     * Size of the toggle view
+     * @param toggleSize size in pixels
+     */
+    public void setPasswordToggleSize(int toggleSize){
+        if(isToggleAdded) {
+            passwordToggleSize=passwordToggleSize;
+            int height = (int) Math.round(passwordToggleSize - (passwordToggleSize * .10));
+            LinearLayoutCompat.LayoutParams layoutParams = new LinearLayoutCompat.
+                    LayoutParams(passwordToggleSize,
+                    height/*,1*/);
+            editTextsArrayList.get(editTextsArrayList.size() - 1).setLayoutParams(layoutParams);
+        }
+    }
+
+    /**
+     * Color/Tint to be applied to the toggle view
+     * @param color color resource
+     */
+    public void setPasswordToggleColor(int color){
+        if(isToggleAdded) {
+            passwordToggleColor=color;
+            Drawable drawable= editTextsArrayList.get(editTextsArrayList.size() - 1).getBackground();
+            drawable.setColorFilter(passwordToggleColor, PorterDuff.Mode.SRC_IN);
+            editTextsArrayList.get(editTextsArrayList.size() - 1).setBackground(drawable);
+        }
+    }
 }

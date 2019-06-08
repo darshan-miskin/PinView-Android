@@ -13,14 +13,12 @@
         app:pinCount="5"
         app:inputType="number"
         app:isPassword="false"
-        app:pinText="Hello"
         app:showPasswordToggle="true"
         app:pinBackground="@drawable/pin_background"
-
         app:pinSize="30dp"
         app:passwordToggleSize="26dp"
         app:passwordToggleColor="@color/colorAccent"
-
+        app:pinText="Hello"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
