@@ -20,8 +20,13 @@ class PinOnKeyListener implements View.OnKeyListener {
     @Override
     public boolean onKey(View v, int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_DEL && event.getAction() == KeyEvent.ACTION_DOWN) {
-            if (pinEditTexts.get(currentIndex).getText().toString().isEmpty() && currentIndex != 0)
+            if (pinEditTexts.get(currentIndex).getText().toString().isEmpty() && currentIndex != 0) {
+                PinTextWatcher.isDeleting=true;
+                pinEditTexts.get(currentIndex - 1).setFocusable(true);
+                pinEditTexts.get(currentIndex - 1).setFocusableInTouchMode(true);
+                pinEditTexts.get(currentIndex - 1).setText("");
                 pinEditTexts.get(currentIndex - 1).requestFocus();
+            }
         }
         return false;
     }

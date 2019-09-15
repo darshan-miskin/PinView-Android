@@ -16,6 +16,7 @@ class PinTextWatcher implements TextWatcher {
 
     private int currentIndex;
     private boolean isFirst = false, isLast = false;
+    static boolean isDeleting=false;
     private static boolean isProcessing=false;
     private String newTypedString = "", entirePin="";
     private ArrayList<EditText> pinEditTexts=new ArrayList<>();
@@ -54,16 +55,20 @@ class PinTextWatcher implements TextWatcher {
         if(!isProcessing)
             if (text.length() >= 1)
                 moveToNext();
-            else
-                moveToPrevious();
+//            else {
+//                if(!isDeleting)
+//                    moveToPrevious();
+//                isDeleting=false;
+//            }
     }
 
     private void moveToNext() {
-        if (!isLast)
+        if (!isLast) {
+            pinEditTexts.get(currentIndex).setFocusable(false);
             pinEditTexts.get(currentIndex + 1).requestFocus();
+        }
 
         if (isAllEditTextsFilled() && !isProcessing) {
-//            pinEditTexts.get(currentIndex).clearFocus();
             if(PinView.onPinCompletionListener!=null){
                 PinView.onPinCompleted(entirePin);
             }
@@ -71,8 +76,14 @@ class PinTextWatcher implements TextWatcher {
     }
 
     private void moveToPrevious() {
-        if (!isFirst)
+        isDeleting=true;
+
+        if (!isFirst) {
+            pinEditTexts.get(currentIndex - 1).setFocusable(true);
+            pinEditTexts.get(currentIndex - 1).setText("");
+            pinEditTexts.get(currentIndex - 1).setFocusableInTouchMode(true);
             pinEditTexts.get(currentIndex - 1).requestFocus();
+        }
     }
 
     private boolean isAllEditTextsFilled() {

@@ -39,6 +39,7 @@ public class PinView extends LinearLayoutCompat {
         this.context=context;
         this.setOrientation(HORIZONTAL);
         this.setGravity(Gravity.CENTER);
+
         addPins();
     }
 
@@ -128,8 +129,11 @@ public class PinView extends LinearLayoutCompat {
             editTextsArrayList.get(i).setOnKeyListener(new PinOnKeyListener(i, editTextsArrayList));
         }
         isToggleAdded=false;
-        setText(pinText);
+
+        if(!isInEditMode())
+            setText(pinText);
         setShowPasswordToggle(showPasswordToggle);
+
 //        requestPinFocus();
     }
 
@@ -411,4 +415,6 @@ public class PinView extends LinearLayoutCompat {
             editTextsArrayList.get(editTextsArrayList.size() - 1).setBackground(drawable);
         }
     }
+
+
 }
