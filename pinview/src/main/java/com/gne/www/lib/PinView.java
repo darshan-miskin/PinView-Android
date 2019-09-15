@@ -21,7 +21,7 @@ import android.widget.EditText;
 import java.util.ArrayList;
 
 @InverseBindingMethods(value = {
-        @InverseBindingMethod(type = PinView.class, attribute = "pinView:pinText", method = "getText")
+        @InverseBindingMethod(type = LinearLayoutCompat.class, attribute = "pinView:pinText")
 })
 public class PinView extends LinearLayoutCompat {
 
