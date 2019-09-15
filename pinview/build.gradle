@@ -4,6 +4,9 @@ group='com.github.darshan-miskin'
 version="1.0"
 
 android {
+    dataBinding{
+        enabled=true
+    }
     compileSdkVersion 28
 
 
