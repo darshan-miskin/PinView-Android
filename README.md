@@ -18,7 +18,7 @@ Add the following in your root build.gradle at the end of repositories:
  Add this in your module's build.gradle 
  
 	dependencies {
-	        implementation 'com.github.darshan-miskin:PinView-Android:v1.1.0'
+	        implementation 'com.github.darshan-miskin:PinView-Android:v1.1.1'
 	}
   
   # Features
@@ -26,7 +26,8 @@ Add the following in your root build.gradle at the end of repositories:
   - Password toggle to hide/show text on the go.
   - Easy getText() and setText() methods like a regular EditText.
   - Listener to detect when the pin is completely entered.
-  - Styleable pins.
+  - Customizable pin background, textsize and pinsize.
+  - Customizable toggle tint/color and size.
   - Flag to set password input type. 
   
   # Usage
@@ -37,11 +38,15 @@ Add the following in your root build.gradle at the end of repositories:
         android:id="@+id/pinview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:pinCount="4"
+        app:pinCount="5"
         app:inputType="number"
         app:isPassword="false"
         app:showPasswordToggle="true"
         app:pinBackground="@drawable/pin_background"
+        app:pinSize="30dp"
+        app:passwordToggleSize="26dp"
+        app:passwordToggleColor="@color/colorAccent"
+        app:pinText="Hello"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
         
@@ -60,6 +65,9 @@ Add the following in your root build.gradle at the end of repositories:
         pinView.setShowPasswordToggle(true);         //make the password toggle visible
         pinView.requestPinFocus();                   //request focus at zeroth position pin
         pinView.requestPinFocus(4);                  //request focus on pin at 4th index, defaults to zeroth if invalid index
+        pinView.setPasswordToggleColor(getResources().getColor(R.color.colorPrimary)); //set toggle drawable tint/color
+        pinView.setPinTextSize(23);                  //set pin text size in sp
+        pinView.setPasswordToggleSize(20);           //set password toggle size in dp
         
         pinView.setOnPinCompletionListener(new OnPinCompletedListener() {
             @Override
