@@ -3,11 +3,11 @@ package com.gne.www.lib;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.databinding.InverseBindingMethod;
-import android.databinding.InverseBindingMethods;
+import androidx.databinding.InverseBindingMethod;
+import androidx.databinding.InverseBindingMethods;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
-import android.support.v7.widget.LinearLayoutCompat;
+import androidx.appcompat.widget.LinearLayoutCompat;
 import android.text.InputFilter;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
@@ -20,9 +20,7 @@ import android.widget.EditText;
 
 import java.util.ArrayList;
 
-@InverseBindingMethods(value = {
-        @InverseBindingMethod(type = LinearLayoutCompat.class, attribute = "pinView:pinText")
-})
+
 public class PinView extends LinearLayoutCompat {
 
     private final float DEFAULT_PIN_TEXT_SIZE=23;

@@ -1,16 +1,13 @@
 package com.gne.www.lib;
 
 
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 
 import java.util.ArrayList;
-
-import static android.content.Context.INPUT_METHOD_SERVICE;
 
 class PinTextWatcher implements TextWatcher {
 
