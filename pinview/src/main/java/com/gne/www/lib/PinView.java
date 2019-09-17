@@ -133,7 +133,7 @@ public class PinView extends LinearLayoutCompat {
         }
         isToggleAdded=false;
 
-        if(!isInEditMode())
+        if(!isInEditMode() && pinText!=null)
             setText(pinText);
         setShowPasswordToggle(showPasswordToggle);
 
