@@ -3,8 +3,10 @@ package com.gne.www.lib;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.res.TypedArray;
-import androidx.databinding.InverseBindingMethod;
-import androidx.databinding.InverseBindingMethods;
+
+import androidx.annotation.ColorInt;
+import androidx.core.content.ContextCompat;
+
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import androidx.appcompat.widget.LinearLayoutCompat;
@@ -16,8 +18,10 @@ import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 
@@ -30,6 +34,8 @@ public class PinView extends LinearLayoutCompat {
     private int pinSize =getResources().getDimensionPixelSize(R.dimen.pin_size), passwordToggleSize=getResources().getDimensionPixelSize(R.dimen.password_toggle_size);
     private int passwordToggleColor=getResources().getColor(android.R.color.black);
     private float pinTextSize=DEFAULT_PIN_TEXT_SIZE;
+    private int pinTextColor=getResources().getColor(android.R.color.black);
+//    private int pinCursorColor =getResources().getColor(android.R.color.holo_orange_dark);
     private short pinCount=DEFAULT_PIN_COUNT, inputType= com.gne.www.lib.InputType.TYPE_NUMBER;
     private boolean isPassword=false, showPasswordToggle=false, isToggleAdded=false;
     private Drawable background;
@@ -78,6 +84,8 @@ public class PinView extends LinearLayoutCompat {
         pinTextSize =a.getDimension(R.styleable.PinView_pinTextSize,DEFAULT_PIN_TEXT_SIZE);
         passwordToggleSize =a.getDimensionPixelSize(R.styleable.PinView_passwordToggleSize,passwordToggleSize);
         passwordToggleColor =a.getColor(R.styleable.PinView_passwordToggleColor,passwordToggleColor);
+        pinTextColor =a.getColor(R.styleable.PinView_textColor,pinTextColor);
+//        pinCursorColor =a.getColor(R.styleable.PinView_cursorColor,pinCursorColor);
 
         if(a.hasValue(R.styleable.PinView_pinBackground)){
             background=a.getDrawable(R.styleable.PinView_pinBackground);
@@ -114,6 +122,8 @@ public class PinView extends LinearLayoutCompat {
                     getResources().getDimensionPixelSize(R.dimen.margin_pin_edit_text),getResources().getDimensionPixelSize(R.dimen.margin_pin_edit_text));
             editText.setLayoutParams(layoutParams);
             editText.setTextSize(pinTextSize);
+            editText.setTextColor(pinTextColor);
+//            setCursorColor(editText,pinCursorColor);
             editText.setMaxLines(1);
             editText.setLines(1);
             editText.setPadding(0,0,0,0);
@@ -392,6 +402,28 @@ public class PinView extends LinearLayoutCompat {
     }
 
     /**
+     * Text color of the pins
+     * @param textColor
+     */
+    public void setTextColor(int textColor){
+        pinTextColor=textColor;
+        for (int i=0; i<getPinCount(); i++){
+            editTextsArrayList.get(i).setTextColor(pinTextColor);
+        }
+    }
+
+    /**
+     * Cursor color of the pins
+     * @param cursorColor
+     */
+//    public void setCursorColor(int cursorColor){
+//        pinCursorColor=cursorColor;
+//        for (int i=0; i<getPinCount(); i++){
+//            setCursorColor(editTextsArrayList.get(i),pinCursorColor);
+//        }
+//    }
+
+    /**
      * Size of the toggle view
      * @param toggleSize size in pixels
      */
@@ -419,5 +451,28 @@ public class PinView extends LinearLayoutCompat {
         }
     }
 
+    private void setCursorColor(EditText view, @ColorInt int color) {
+        try {
+            // Get the cursor resource id
+            Field field = TextView.class.getDeclaredField("mCursorDrawableRes");
+            field.setAccessible(true);
+            int drawableResId = field.getInt(view);
 
+            // Get the editor
+            field = TextView.class.getDeclaredField("mEditor");
+            field.setAccessible(true);
+            Object editor = field.get(view);
+
+            // Get the drawable and set a color filter
+            Drawable drawable = ContextCompat.getDrawable(view.getContext(), drawableResId);
+            drawable.setColorFilter(color, PorterDuff.Mode.SRC_IN);
+            Drawable[] drawables = {drawable, drawable};
+
+            // Set the drawables
+            field = editor.getClass().getDeclaredField("mCursorDrawable");
+            field.setAccessible(true);
+            field.set(editor, drawables);
+        } catch (Exception ignored) {
+        }
+    }
 }

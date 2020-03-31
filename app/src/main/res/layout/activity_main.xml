@@ -10,6 +10,8 @@
         android:id="@+id/pinview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:textColor="@color/colorAccent"
+        app:cursorColor="@color/colorPrimary"
         app:pinCount="5"
         app:inputType="number"
         app:isPassword="false"

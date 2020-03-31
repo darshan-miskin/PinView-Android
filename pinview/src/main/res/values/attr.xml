@@ -16,6 +16,8 @@
         <attr name="pinTextSize" format="dimension"/>
         <attr name="passwordToggleSize" format="dimension"/>
         <attr name="passwordToggleColor" format="color"/>
+        <attr name="textColor" format="color"/>
+<!--        <attr name="cursorColor" format="color"/>-->
         <attr name="pinSize" format="dimension"/>
     </declare-styleable>
 </resources>

@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
 //        pinView.setPinSize(20);
         pinView.setPinTextSize(13);
         pinView.setPasswordToggleSize(20);
+//        pinView.setTextColor(getResources().getColor(R.color.colorPrimary));
 
 
         pinView.setOnPinCompletionListener(new OnPinCompletedListener() {
