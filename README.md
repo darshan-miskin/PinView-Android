@@ -69,7 +69,7 @@ Add the following in your root build.gradle at the end of repositories:
         pinView.setPasswordToggleColor(getResources().getColor(R.color.colorPrimary)); //set toggle drawable tint/color
         pinView.setPinTextSize(23);                  //set pin text size in sp
         pinView.setPasswordToggleSize(20);           //set password toggle size in dp
-	pinView.setTextColor(getResources().getColor(R.color.colorPrimary));  
+	    pinView.setTextColor(getResources().getColor(R.color.colorPrimary));  
         
         pinView.setOnPinCompletionListener(new OnPinCompletedListener() {
             @Override
