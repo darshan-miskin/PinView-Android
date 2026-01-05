@@ -1,23 +1,24 @@
 apply plugin: 'com.android.library'
-group='com.github.darshan-miskin'
-//artifact="PinView"
-version="1.0"
+
+group = 'com.github.darshan-miskin'
+version = "1.0"
 
 android {
-    dataBinding{
-        enabled=true
-    }
-    compileSdkVersion 28
+    namespace 'com.github.darshan_miskin.pinview'  // Android 7+ ke liye required
 
+    compileSdk 36  // Latest compile SDK
 
     defaultConfig {
-        minSdkVersion 16
-        targetSdkVersion 28
+        minSdk 16
+        targetSdk 36
         versionCode 1
         versionName "1.0"
 
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildFeatures {
+        dataBinding true
     }
 
     buildTypes {
@@ -25,12 +26,16 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
-        debug{
+        debug {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
 
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
 }
 
 dependencies {
