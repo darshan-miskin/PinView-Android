@@ -2,6 +2,8 @@ package com.gne.www.pinviewlibrary;
 
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
@@ -28,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
         pinView.setPassword(true);
         pinView.requestPinFocus();
         pinView.requestPinFocus(4);
-        pinView.setPasswordToggleColor(getResources().getColor(R.color.colorPrimary));
+        pinView.setPasswordToggleColor(ContextCompat.getColor(this, R.color.colorPrimary));
 //        pinView.setPinSize(20);
         pinView.setPinTextSize(13);
         pinView.setPasswordToggleSize(20);

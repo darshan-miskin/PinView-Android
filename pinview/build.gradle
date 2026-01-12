@@ -4,12 +4,12 @@ group = 'com.github.darshan-miskin'
 version = "1.0"
 
 android {
-    namespace 'com.github.darshan_miskin.pinview'  // Android 7+ ke liye required
+    namespace 'com.github.darshan_miskin.pinview'
 
     compileSdk 36  // Latest compile SDK
 
     defaultConfig {
-        minSdk 16
+        minSdk 21
         targetSdk 36
         versionCode 1
         versionName "1.0"
@@ -39,15 +39,11 @@ android {
 }
 
 dependencies {
-//    implementation fileTree(dir: 'libs', include: ['*.jar'])
-//
-//
-    implementation 'androidx.appcompat:appcompat:1.0.0'
-    androidTestImplementation 'junit:junit:4.12'
 
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.1.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
-//    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    implementation 'androidx.appcompat:appcompat:1.7.1'
+
+    androidTestImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test:runner:1.7.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.7.0'
 
 }
