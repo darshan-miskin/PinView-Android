@@ -34,7 +34,7 @@ Add the following in your root build.gradle at the end of repositories:
   
   XML:
   
-    <com.darshan_miskin.www.lib.PinView
+    <com.gne.www.lib.PinView
         android:id="@+id/pinview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
