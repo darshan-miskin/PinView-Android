@@ -1,11 +1,8 @@
-package com.gne.www.lib;
+package com.darshan_miskin.www.lib;
 
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.res.TypedArray;
-
-import androidx.annotation.ColorInt;
-import androidx.core.content.ContextCompat;
 
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
@@ -18,12 +15,10 @@ import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
 
 
-import com.github.darshan_miskin.pinview.R;
+import com.darshan_miskin.darshan_miskin.pinview.R;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 
@@ -38,7 +33,7 @@ public class PinView extends LinearLayoutCompat {
     private float pinTextSize=DEFAULT_PIN_TEXT_SIZE;
     private int pinTextColor=getResources().getColor(android.R.color.black);
 //    private int pinCursorColor =getResources().getColor(android.R.color.holo_orange_dark);
-    private short pinCount=DEFAULT_PIN_COUNT, inputType= com.gne.www.lib.InputType.TYPE_NUMBER;
+    private short pinCount=DEFAULT_PIN_COUNT, inputType= com.darshan_miskin.www.lib.InputType.TYPE_NUMBER;
     private boolean isPassword=false, showPasswordToggle=false, isToggleAdded=false;
     private Drawable background;
     private ArrayList<EditText> editTextsArrayList =new ArrayList<>();

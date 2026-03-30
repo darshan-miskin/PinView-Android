@@ -1,4 +1,4 @@
-package com.gne.www.pinviewlibrary;
+package com.darshan_miskin.www.pinviewlibrary;
 
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -7,9 +7,9 @@ import androidx.core.content.ContextCompat;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
-import com.gne.www.lib.InputType;
-import com.gne.www.lib.OnPinCompletedListener;
-import com.gne.www.lib.PinView;
+import com.darshan_miskin.www.lib.InputType;
+import com.darshan_miskin.www.lib.OnPinCompletedListener;
+import com.darshan_miskin.www.lib.PinView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
         final PinView pinView=findViewById(R.id.pinview);
 
         pinView.setPinCount(6);
-        pinView.setText("helllooo");
+        pinView.setText("hello!!");
 //        pinView.setPinBackground(getResources().getDrawable(R.drawable.pin_background));
         pinView.getText();
         pinView.setPinSize(50);

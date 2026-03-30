@@ -1,4 +1,4 @@
-package com.gne.www.lib;
+package com.darshan_miskin.www.lib;
 
 import android.view.KeyEvent;
 import android.view.View;

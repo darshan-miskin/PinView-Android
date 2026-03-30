@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <com.gne.www.lib.PinView
+    <com.darshan_miskin.www.lib.PinView
         android:id="@+id/pinview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

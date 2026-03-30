@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'maven-publish'
 
 android {
-    namespace 'com.github.darshan_miskin.pinview'
+    namespace 'com.darshan_miskin.darshan_miskin.pinview'
 
     compileSdk 36  // Latest compile SDK
 

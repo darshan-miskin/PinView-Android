@@ -1,11 +1,11 @@
 apply plugin: 'com.android.application'
 
 android {
-    namespace 'com.gne.www.pinviewlibrary'
+    namespace 'com.darshan_miskin.www.pinviewlibrary'
     compileSdk 36
 
     defaultConfig {
-        applicationId "com.gne.www.pinviewlibrary"
+        applicationId "com.github.www.pinviewlibrary"
         minSdk 24
         targetSdk 36
         versionCode 11
@@ -36,10 +36,10 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.7.0'
 
     constraints {
-        implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.22") {
+        implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:2.2.10") {
             because "Force old jdk7 to match main stdlib version → no duplicates"
         }
-        implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.22") {
+        implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.2.10") {
             because "Force old jdk8 to match main stdlib version → no duplicates"
         }
     }
