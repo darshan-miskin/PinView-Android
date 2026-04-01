@@ -14,6 +14,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.tooling.preview.Preview
 import com.darshan_miskin.www.lib.compose.PinView
@@ -25,22 +26,11 @@ class MainActivityCompose : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             PinViewAndroidTheme {
-                val keyboard = LocalSoftwareKeyboardController.current
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    PinView(
-                        modifier = Modifier
-                            .padding(innerPadding)
-                            .fillMaxSize()
-                            .wrapContentHeight(),
-                        text = "123456",
-                        showPasswordToggle = true,
-                        onValueChange = {
-                            Log.d("asdf", "pin value: $it")
-                        },
-                    ) {
-                        Toast.makeText(this, "Entered pin is: $it", Toast.LENGTH_LONG).show()
-                        keyboard?.hide()
-                    }
+                    Greeting(modifier = Modifier
+                        .padding(innerPadding)
+                        .fillMaxSize()
+                        .wrapContentHeight())
                 }
             }
         }
@@ -48,17 +38,26 @@ class MainActivityCompose : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
+fun Greeting(modifier: Modifier = Modifier) {
+    val keyboard = LocalSoftwareKeyboardController.current
+    val context = LocalContext.current
+    PinView(
+        modifier = modifier,
+        text = "1234",
+        showPasswordToggle = true,
+        onValueChange = {
+            Log.d("asdf", "pin value: $it")
+        },
+    ) {
+        Toast.makeText( context, "Entered pin is: $it", Toast.LENGTH_LONG).show()
+        keyboard?.hide()
+    }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
     PinViewAndroidTheme {
-        Greeting("Android")
+        Greeting()
     }
 }
