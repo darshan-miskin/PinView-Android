@@ -125,7 +125,6 @@ class PinView : LinearLayoutCompat {
             field = value
 
             textWatcherArrayList[0].setProcessing(true)
-            Log.d("asdf", "isPassword set(): $value \t field: $field")
 //            if (value) {
 //                for (i in 0..<this.pinCount) {
 //                    if (inputType == InputType.TYPE_NUMBER)
@@ -161,7 +160,6 @@ class PinView : LinearLayoutCompat {
             field = value
 
             isPassword = value
-            Log.d("asdf", "showPasswordToggle set() \t isPassword: $isPassword")
 
             if (value) {
 //                isPassword = true
@@ -191,14 +189,11 @@ class PinView : LinearLayoutCompat {
 
                     editTextsArrayList[this.pinCount.toInt()]
                         .setOnClickListener {
-                            Log.d("asdf", "Icon Clicked!")
-                            Log.d("asdf", "isPassword: $isPassword")
                             textWatcherArrayList[0].setProcessing(true)
 //                            for (i in 0..<this@PinView.pinCount) {
 //                                setPasswordType(editTextsArrayList[i])
 //                            }
                             this.isPassword = !this.isPassword
-                            Log.d("asdf", "isPassword: $isPassword")
                             textWatcherArrayList[this@PinView.pinCount - 1].setProcessing(false)
                             if (isPassword) {
                                 val drawable = resources.getDrawable(R.drawable.ic_show)
@@ -264,7 +259,6 @@ class PinView : LinearLayoutCompat {
     var inputType = InputType.TYPE_NUMBER
         set(value) {
             field = value
-            Log.d("asdf", "inputType: $inputType \t isPassword: $isPassword")
             for (i in 0..<this.pinCount) {
                 if (value == InputType.TYPE_TEXT) {
                     if (isPassword)
@@ -361,8 +355,6 @@ class PinView : LinearLayoutCompat {
     }
 
     private fun setPasswordType(editText: EditText) {
-        Log.d("asdf", "setPasswordType() called")
-        Log.d("asdf", "isPassword: $isPassword")
         if (isPassword) {
             if (inputType == InputType.TYPE_TEXT)
                 editText.setInputType(android.text.InputType.TYPE_CLASS_TEXT or android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD)
