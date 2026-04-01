@@ -35,7 +35,7 @@ internal class PinTextWatcher(private val currentIndex: Int, pinEditTexts: Array
 
         pinEditTexts[currentIndex].removeTextChangedListener(this)
         pinEditTexts[currentIndex].setText(text)
-        onPinChanged.invoke()
+        if (!isProcessing) onPinChanged.invoke()
         pinEditTexts[currentIndex].setSelection(text.length)
         pinEditTexts[currentIndex].addTextChangedListener(this)
 

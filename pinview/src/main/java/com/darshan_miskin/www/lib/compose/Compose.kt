@@ -27,28 +27,36 @@ fun PinView(
     pinSize: Dp = dimensionResource(R.dimen.pin_size),
     pinTextSize: TextUnit = TextUnit(PinView.DEFAULT_PIN_TEXT_SIZE, TextUnitType.Sp),
     passwordToggleSize: Dp = dimensionResource(R.dimen.password_toggle_size),
-    pinTextColor: Color = if(isSystemInDarkTheme()) Color.White else Color.Black,
-    passwordToggleColor: Color = if(isSystemInDarkTheme()) Color.White else Color.Black,
+    pinTextColor: Color = if (isSystemInDarkTheme()) Color.White else Color.Black,
+    passwordToggleColor: Color = if (isSystemInDarkTheme()) Color.White else Color.Black,
     onPinCompletionListener: (String) -> Unit
 ) {
-    AndroidView(factory = { context ->
-        val themedContext = ContextThemeWrapper(context, android.R.style.Theme_Material)
-        val pinView = PinView(themedContext)
-        pinView.setOnPinCompletionListener(onPinCompletionListener)
-        pinView.setOnPinChanged {
-            onValueChange(pinView.text)
-        }
-        pinView
-    }, update = {
-        it.pinCount = pinCount
-        it.text = text
-        it.inputType = inputType
-        it.showPasswordToggle = showPasswordToggle
-        it.isPassword = isPassword
-        it.passwordToggleColor = passwordToggleColor.toArgb()
-        it.pinTextSizeSp = pinTextSize.value
-        it.pinTextColor = pinTextColor.toArgb()
-        it.pinSizeDp = pinSize.value.toInt()
-        it.passwordToggleSizeDp = passwordToggleSize.value.toInt()
-    }, modifier = modifier, )
+    val isDarkTheme = isSystemInDarkTheme()
+    AndroidView(
+        factory = { context ->
+            val themedContext = ContextThemeWrapper(
+                context,
+                if (isDarkTheme) android.R.style.Theme_Material else android.R.style.Theme_Material_Light
+            )
+            val pinView = PinView(themedContext)
+            pinView.setOnPinCompletionListener(onPinCompletionListener)
+            pinView.setOnPinChanged {
+                onValueChange(pinView.text)
+            }
+            pinView
+        },
+        update = {
+            it.pinCount = pinCount
+            it.text = text
+            it.inputType = inputType
+            it.showPasswordToggle = showPasswordToggle
+            it.isPassword = isPassword
+            it.passwordToggleColor = passwordToggleColor.toArgb()
+            it.pinTextSizeSp = pinTextSize.value
+            it.pinTextColor = pinTextColor.toArgb()
+            it.pinSizeDp = pinSize.value.toInt()
+            it.passwordToggleSizeDp = passwordToggleSize.value.toInt()
+        },
+        modifier = modifier,
+    )
 }
