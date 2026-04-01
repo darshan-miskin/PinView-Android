@@ -8,15 +8,11 @@ import android.text.InputFilter.AllCaps
 import android.text.InputFilter.LengthFilter
 import android.util.AttributeSet
 import android.util.DisplayMetrics
-import android.util.Log
 import android.view.ContextMenu
 import android.view.Gravity
 import android.widget.EditText
 import androidx.annotation.ColorInt
-import androidx.annotation.ColorLong
-import androidx.annotation.ColorRes
 import androidx.appcompat.widget.LinearLayoutCompat
-import androidx.core.content.ContextCompat
 import androidx.core.content.withStyledAttributes
 import com.darshan_miskin.darshan_miskin.pinview.R
 import kotlin.math.roundToInt
@@ -87,16 +83,23 @@ class PinView : LinearLayoutCompat {
         }
     /**
      * Size of the toggle view
-     * @param passwordToggleSize size in pixels
+     * @param passwordToggleSizeDp size in dp
      */
-    var passwordToggleSize = resources.getDimensionPixelSize(R.dimen.password_toggle_size)
+    var passwordToggleSizeDp = resources.getDimensionPixelSize(R.dimen.password_toggle_size)
         set(value) {
             field = value
             if (isToggleAdded) {
-                val height = (field - (field * .10)).roundToInt()
+//                val height = (value - (value * .10)).roundToInt()
                 val layoutParams = LayoutParams(
-                    field,
-                    height /*,1*/
+                    convertDpToPixel(value.toFloat(), context),
+                    convertDpToPixel(value.toFloat(), context),
+                    /*,1*/
+                )
+                layoutParams.setMargins(
+                    resources.getDimensionPixelSize(R.dimen.margin_pin_edit_text),
+                    resources.getDimensionPixelSize(R.dimen.margin_pin_edit_text),
+                    resources.getDimensionPixelSize(R.dimen.margin_pin_edit_text),
+                    resources.getDimensionPixelSize(R.dimen.margin_pin_edit_text)
                 )
                 editTextsArrayList[editTextsArrayList.size - 1].setLayoutParams(layoutParams)
             }
@@ -171,13 +174,13 @@ class PinView : LinearLayoutCompat {
                 val drawable = resources.getDrawable(R.drawable.ic_show)
                 drawable.setColorFilter(passwordToggleColor, PorterDuff.Mode.SRC_IN)
                 editText.background = drawable
-                val height = (passwordToggleSize - (passwordToggleSize * .10)).roundToInt()
+//                val height = (passwordToggleSize - (passwordToggleSize * .10)).roundToInt()
                 val layoutParams = LayoutParams(
-                    passwordToggleSize,
-                    height /*,1*/
+                    passwordToggleSizeDp,
+                    passwordToggleSizeDp /*,1*/
                 )
                 layoutParams.setMargins(
-                    convertDpToPixel(4f, context),
+                    resources.getDimensionPixelSize(R.dimen.margin_pin_edit_text),
                     resources.getDimensionPixelSize(R.dimen.margin_pin_edit_text),
                     resources.getDimensionPixelSize(R.dimen.margin_pin_edit_text),
                     resources.getDimensionPixelSize(R.dimen.margin_pin_edit_text)
@@ -285,8 +288,8 @@ class PinView : LinearLayoutCompat {
 
             pinText = getString(R.styleable.PinView_pinText).toString()
             pinTextSizeSp = getDimension(R.styleable.PinView_pinTextSize, DEFAULT_PIN_TEXT_SIZE)
-            passwordToggleSize =
-                getDimensionPixelSize(R.styleable.PinView_passwordToggleSize, passwordToggleSize)
+            passwordToggleSizeDp =
+                getDimensionPixelSize(R.styleable.PinView_passwordToggleSize, passwordToggleSizeDp)
             passwordToggleColor =
                 getColor(R.styleable.PinView_passwordToggleColor, passwordToggleColor)
             pinTextColor = getColor(R.styleable.PinView_textColor, pinTextColor)

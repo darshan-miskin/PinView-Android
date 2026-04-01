@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
         pinView.text = "hello!!"
 //        pinView.setPinBackground(getResources().getDrawable(R.drawable.pin_background));
         pinView.text
-        pinView.pinSizeDp = 40
+//        pinView.pinSizeDp = 40
         pinView.inputType = InputType.TYPE_TEXT
         pinView.showPasswordToggle = true
         pinView.isPassword = false
@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
         pinView.passwordToggleColor = ContextCompat.getColor(this, R.color.colorPrimary)
 //        pinView.setPinSize(20);
         pinView.pinTextSizeSp = 13f
-        pinView.passwordToggleSize = 80
+        pinView.passwordToggleSizeDp = 30
 
 
 //        pinView.setTextColor(getResources().getColor(R.color.colorPrimary));

@@ -16,7 +16,7 @@
         app:isPassword="false"
         app:showPasswordToggle="true"
         app:pinSize="50dp"
-        app:passwordToggleSize="26dp"
+        app:passwordToggleSize="25dp"
         app:passwordToggleColor="@color/colorAccent"
         app:pinText="Hello"
         app:layout_constraintTop_toTopOf="parent"
