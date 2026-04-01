@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity() {
         pinView.showPasswordToggle = true
         pinView.isPassword = false
         pinView.requestPinFocus()
-        pinView.requestPinFocus(4)
+        pinView.requestPinFocusAt(4)
         pinView.passwordToggleColor = ContextCompat.getColor(this, R.color.colorPrimary)
 //        pinView.setPinSize(20);
         pinView.pinTextSizeSp = 13f

@@ -431,8 +431,8 @@ class PinView : LinearLayoutCompat {
      * Request focus on the pin at specified index, if index is invalid defaults to zeroth pin
      * @param index index of the pin
      */
-    fun requestPinFocus(index: Int) {
-        if (index > 0 && index < this.pinCount) editTextsArrayList.get(index).requestFocus()
+    fun requestPinFocusAt(index: Int) {
+        if (index > 0 && index < this.pinCount) editTextsArrayList[index].requestFocus()
         else editTextsArrayList[0].requestFocus()
     }
 
