@@ -1,9 +1,6 @@
 package com.darshan_miskin.www.lib
 
 
-interface InputType {
-    companion object {
-        const val TYPE_TEXT: Short = 1
-        const val TYPE_NUMBER: Short = 0
-    }
+enum class InputType(val id: Short) {
+    TEXT(1), NUMBER(0)
 }

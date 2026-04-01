@@ -4,6 +4,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.widget.EditText
 import com.darshan_miskin.www.lib.PinView.Companion.onPinCompleted
+import com.darshan_miskin.www.lib.PinView.Companion.onPinChanged
 
 
 internal class PinTextWatcher(private val currentIndex: Int, pinEditTexts: ArrayList<EditText>) :
@@ -34,6 +35,7 @@ internal class PinTextWatcher(private val currentIndex: Int, pinEditTexts: Array
 
         pinEditTexts[currentIndex].removeTextChangedListener(this)
         pinEditTexts[currentIndex].setText(text)
+        onPinChanged.invoke()
         pinEditTexts[currentIndex].setSelection(text.length)
         pinEditTexts[currentIndex].addTextChangedListener(this)
 

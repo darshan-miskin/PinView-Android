@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
 //        pinView.setPinBackground(getResources().getDrawable(R.drawable.pin_background));
         pinView.text
 //        pinView.pinSizeDp = 40
-        pinView.inputType = InputType.TYPE_TEXT
+        pinView.inputType = InputType.TEXT
         pinView.showPasswordToggle = true
         pinView.isPassword = false
         pinView.requestPinFocus()

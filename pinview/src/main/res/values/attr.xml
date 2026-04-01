@@ -3,7 +3,7 @@
     <declare-styleable name="PinView">
         <attr name="pinText" format="string"/>
         <attr name="pinCount" format="integer"/>
-        <attr name="inputType" format="integer">
+        <attr name="inputType" format="enum">
             <enum name="text" value="1"/>
             <enum name="number" value="0"/>
         </attr>
