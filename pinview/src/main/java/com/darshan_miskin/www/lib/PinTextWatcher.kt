@@ -6,8 +6,6 @@ import android.widget.EditText
 
 
 internal class PinTextWatcher(
-    private val onPinChanged: () -> Unit,
-    private val onPinCompleted: (pin: String) -> Unit,
     private val currentIndex: Int,
     pinEditTexts: ArrayList<EditText>
 ) :
@@ -17,6 +15,8 @@ internal class PinTextWatcher(
     private var newTypedString = ""
     private var entirePin = ""
     private val pinEditTexts = ArrayList<EditText>()
+    private lateinit var onPinCompletionListener: OnPinCompletionListener
+    private lateinit var onPinChangedListener: OnPinChangedListener
 
     init {
         this.pinEditTexts.clear()
@@ -24,6 +24,14 @@ internal class PinTextWatcher(
 
         if (currentIndex == 0) this.isFirst = true
         else if (currentIndex == pinEditTexts.size - 1) this.isLast = true
+    }
+
+    internal fun setOnPinCompletionListener(onPinCompletionListener: OnPinCompletionListener) {
+        this.onPinCompletionListener = onPinCompletionListener
+    }
+
+    internal fun setOnPinChangedListener(onPinChangedListener: OnPinChangedListener) {
+        this.onPinChangedListener = onPinChangedListener
     }
 
     override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
@@ -38,7 +46,7 @@ internal class PinTextWatcher(
 
         pinEditTexts[currentIndex].removeTextChangedListener(this)
         pinEditTexts[currentIndex].setText(text)
-        if (!isProcessing) onPinChanged.invoke()
+        if (!isProcessing && ::onPinChangedListener.isInitialized) onPinChangedListener.onPinChanged()
         pinEditTexts[currentIndex].setSelection(text.length)
         pinEditTexts[currentIndex].addTextChangedListener(this)
 
@@ -56,8 +64,8 @@ internal class PinTextWatcher(
             pinEditTexts[currentIndex + 1].requestFocus()
         }
 
-        if (this.isAllEditTextsFilled && !isProcessing) {
-            onPinCompleted.invoke(entirePin)
+        if (this.isAllEditTextsFilled && !isProcessing && ::onPinCompletionListener.isInitialized) {
+            onPinCompletionListener.onPinCompleted(entirePin)
         }
     }
 

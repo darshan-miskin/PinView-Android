@@ -1,6 +1,7 @@
 package com.darshan_miskin.www.pinviewlibrary
 
 import android.os.Bundle
+import android.util.Log
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -28,6 +29,10 @@ class MainActivity : AppCompatActivity() {
         pinView.pinTextSizeSp = 13f
         pinView.passwordToggleSizeDp = 30
         pinView.pinTextColor = ContextCompat.getColor(this, R.color.colorPrimary)
+
+        pinView.setOnPinChangedListener {
+            Log.d("asdf", "Pin Changed to: ${pinView.text}")
+        }
 
         pinView.setOnPinCompletionListener { entirePin ->
             Toast.makeText(this@MainActivity, "Entire pin is: $entirePin", Toast.LENGTH_LONG).show()

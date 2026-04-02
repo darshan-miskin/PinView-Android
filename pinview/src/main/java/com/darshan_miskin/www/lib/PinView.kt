@@ -4,7 +4,7 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.graphics.PorterDuff
 import android.graphics.drawable.Drawable
-import android.text.InputFilter.AllCaps
+import android.text.InputFilter
 import android.text.InputFilter.LengthFilter
 import android.util.AttributeSet
 import android.util.DisplayMetrics
@@ -27,10 +27,10 @@ class PinView : LinearLayoutCompat {
     private val context: Context
     private var pinText: String = ""
     private var isToggleAdded = false
-    internal val editTextsArrayList = ArrayList<EditText>()
-    internal val textWatcherArrayList = ArrayList<PinTextWatcher>()
-    internal var onPinCompleted: (entirePin: String) -> Unit = {}
-    internal var onPinChanged: () -> Unit = {}
+    private val editTextsArrayList = ArrayList<EditText>()
+    private val textWatcherArrayList = ArrayList<PinTextWatcher>()
+    private var onPinCompletionListener: OnPinCompletionListener = OnPinCompletionListener {}
+    private var onPinChangedListener: OnPinChangedListener = OnPinChangedListener {}
 
     constructor(context: Context) : super(context) {
         this.context = context
@@ -109,7 +109,7 @@ class PinView : LinearLayoutCompat {
             editText.setMaxLines(1)
             editText.setLines(1)
             editText.setPadding(0, 0, 0, 0)
-            editText.setFilters(arrayOf(LengthFilter(1), AllCaps()))
+            editText.setFilters(arrayOf(LengthFilter(1)))
             if (pinBackground != null) editText.background = pinBackground
             setPasswordType(editText)
             editTextsArrayList.add(editText)
@@ -117,7 +117,7 @@ class PinView : LinearLayoutCompat {
         }
         textWatcherArrayList.clear()
         for (i in 0..<this.pinCount) {
-            val pinTextWatcher = PinTextWatcher(onPinChanged, onPinCompleted, i, editTextsArrayList)
+            val pinTextWatcher = PinTextWatcher(i, editTextsArrayList)
             textWatcherArrayList.add(pinTextWatcher)
             editTextsArrayList[i].addTextChangedListener(pinTextWatcher)
             editTextsArrayList[i].setOnKeyListener(PinOnKeyListener(i, editTextsArrayList))
@@ -131,9 +131,7 @@ class PinView : LinearLayoutCompat {
     }
 
     /**
-     * Color/Tint to be applied to the toggle view
-     * <br></br> Default is black.
-     * @param color color resource
+     * Color/Tint to be applied to the toggle view. Default is black.
      */
     @ColorInt
     var passwordToggleColor = resources.getColor(android.R.color.black)
@@ -147,8 +145,7 @@ class PinView : LinearLayoutCompat {
         }
 
     /**
-     * Text color of the pins
-     * @param pinTextColor
+     * Text color of the pins.
      */
     var pinTextColor = resources.getColor(android.R.color.system_accent3_600)
         set(value) {
@@ -159,8 +156,7 @@ class PinView : LinearLayoutCompat {
         }
 
     /**
-     * Size of the toggle view
-     * @param passwordToggleSizeDp size in dp
+     * Size of the toggle view in dp.
      */
     var passwordToggleSizeDp = resources.getDimensionPixelSize(R.dimen.password_toggle_size)
         set(value) {
@@ -182,8 +178,7 @@ class PinView : LinearLayoutCompat {
         }
 
     /**
-     * Text size of the pins
-     * @param pinTextSizeSp size in sp
+     * Text size of the pins in sp.
      */
     var pinTextSizeSp = DEFAULT_PIN_TEXT_SIZE
         set(value) {
@@ -194,8 +189,10 @@ class PinView : LinearLayoutCompat {
         }
 
     /**
-     * Specify if the pinview is of the type password.
-     * <br></br> Default is false
+     * Specify if the pinview is of the type password. Default value is false.
+     *
+     * Setting a value to this variable is independent of [showPasswordToggle]. However, setting a value to [showPasswordToggle] updates this variable.
+     *
      * @param isPassword either true or false
      */
     var isPassword = false
@@ -205,7 +202,7 @@ class PinView : LinearLayoutCompat {
             textWatcherArrayList[0].setProcessing(true)
 //            if (value) {
 //                for (i in 0..<this.pinCount) {
-//                    if (inputType == InputType.TYPE_NUMBER)
+//                    if (inputType == InputType.NUMBER)
 //                        editTextsArrayList[i].setInputType(android.text.InputType.TYPE_CLASS_NUMBER or android.text.InputType.TYPE_NUMBER_VARIATION_PASSWORD)
 //                    else
 //                        editTextsArrayList[i].setInputType(android.text.InputType.TYPE_CLASS_TEXT or android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD)
@@ -229,8 +226,10 @@ class PinView : LinearLayoutCompat {
         }
 
     /**
-     * Enable or disable password toggle.
-     * <br></br> Default is false
+     * Enable or disable password toggle. Default value is false.
+     *
+     * Enabling this, simultaneously also enables [isPassword]
+     *
      * @param showPasswordToggle boolean value
      */
     var showPasswordToggle = false
@@ -261,7 +260,7 @@ class PinView : LinearLayoutCompat {
                 )
                 editText.setLayoutParams(layoutParams)
                 editText.setPadding(4, 4, 4, 4)
-                if (!isToggleAdded) {
+                if (!isToggleAdded && showPasswordToggle) {
                     editTextsArrayList.add(editText)
 
                     editTextsArrayList[this.pinCount.toInt()]
@@ -294,9 +293,7 @@ class PinView : LinearLayoutCompat {
         }
 
     /**
-     * Total number of pins in the pinview
-     * <br></br> Default is 6
-     * @param pinCount integer
+     * Total number of pins in the pinview. Default is 4.
      */
     var pinCount = DEFAULT_PIN_COUNT
         set(value) {
@@ -305,8 +302,7 @@ class PinView : LinearLayoutCompat {
         }
 
     /**
-     * Default value is 50dp
-     * @param pinSizeDp Width of the individual pin. Is also applied to height.
+     * Width of the individual pin in dp. Is also applied to height. Default value is 50dp.
      */
     var pinSizeDp = resources.getDimensionPixelSize(R.dimen.pin_size)
         set(value) {
@@ -328,8 +324,9 @@ class PinView : LinearLayoutCompat {
 
     /**
      *
-     * <br></br> Default is Number
-     * @param inputType Takes input as InputType.NUMBER or InputType.TEXT
+     * Set the input type of the pinview. Default is [InputType.NUMBER].
+     *
+     * Can either be [InputType.NUMBER] or [InputType.TEXT]
      */
     var inputType = InputType.NUMBER
         set(value) {
@@ -340,11 +337,34 @@ class PinView : LinearLayoutCompat {
                         editTextsArrayList[i].setInputType(android.text.InputType.TYPE_CLASS_TEXT or android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD)
                     else
                         editTextsArrayList[i].setInputType(android.text.InputType.TYPE_CLASS_TEXT)
+                    editTextsArrayList[i].filters = arrayOf(
+                        LengthFilter(1),
+                        InputFilter { source, start, end, dest, dstart, dend ->
+                            for (i in start until end) {
+                                if (Character.isDigit(source[i])) {
+                                    return@InputFilter ""
+                                }
+                            }
+                            null
+                        }
+                    )
                 } else {
                     if (isPassword)
                         editTextsArrayList[i].setInputType(android.text.InputType.TYPE_CLASS_NUMBER or android.text.InputType.TYPE_NUMBER_VARIATION_PASSWORD)
                     else
                         editTextsArrayList[i].setInputType(android.text.InputType.TYPE_CLASS_NUMBER)
+
+                    editTextsArrayList[i].filters = arrayOf(
+                        LengthFilter(1),
+                        InputFilter { source, start, end, dest, dstart, dend ->
+                            for (i in start until end) {
+                                if (Character.isLetter(source[i])) {
+                                    return@InputFilter ""
+                                }
+                            }
+                            null
+                        }
+                    )
                 }
             }
         }
@@ -356,8 +376,8 @@ class PinView : LinearLayoutCompat {
             .setOnMenuItemClickListener {
                 val clipboardManager =
                     context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                val text = clipboardManager.primaryClip?.getItemAt(0)?.text.toString()
-                this@PinView.text = text
+                val text: CharSequence? = clipboardManager.primaryClip?.getItemAt(0)?.text
+                if(text!=null && text.trim().isNotEmpty()) this@PinView.text = text.toString()
                 true
             }
     }
@@ -376,11 +396,12 @@ class PinView : LinearLayoutCompat {
         }
     }
 
+    /**
+     * Set the pinview text
+     *
+     * @return Collective text in the pinview
+     */
     var text: String
-        /**
-         * 
-         * @return Collective text in the pinview
-         */
         get() {
             var text = ""
             for (i in 0..<this.pinCount) {
@@ -388,10 +409,6 @@ class PinView : LinearLayoutCompat {
             }
             return text
         }
-        /**
-         * Set the pinview text
-         * @param text string
-         */
         set(text) {
             if (text.trim().isEmpty()) return
             var validLength = text.length.toShort()
@@ -402,9 +419,9 @@ class PinView : LinearLayoutCompat {
         }
 
     /**
-     * Sets the drawable background of individual pin
-     * <br></br> Default is null
-     * @param backgroundDrawable Drawable to use as the background
+     * Sets the drawable background of individual pin.
+     *
+     * If no value is assigned, pins will have default [EditText] or [androidx.compose.material3.TextField] background accordingly.
      */
     var pinBackground: Drawable? = null
         set(value) {
@@ -476,17 +493,23 @@ class PinView : LinearLayoutCompat {
 
     /**
      * Set a listener to get notified when all the pins are entered
-     * @param onPinCompleted is a lambda function of type (String) -> Unit
+     * @param onPinCompletionListener instance of [OnPinCompletionListener]
      */
-    fun setOnPinCompletionListener(onPinCompleted: (entirePin: String) -> Unit) {
-        this.onPinCompleted = onPinCompleted
+    fun setOnPinCompletionListener(onPinCompletionListener: OnPinCompletionListener) {
+        this.onPinCompletionListener = onPinCompletionListener
+        textWatcherArrayList.forEach {
+            it.setOnPinCompletionListener(this.onPinCompletionListener)
+        }
     }
 
     /**
      * Set a listener to get notified when the pin changes.
-     * @param onPinChanged is a lambda function of type () -> Unit
+     * @param onPinChangedListener instance of [OnPinChangedListener]
      */
-    fun setOnPinChanged(onPinChanged: () -> Unit) {
-        this.onPinChanged = onPinChanged
+    fun setOnPinChangedListener(onPinChangedListener: OnPinChangedListener) {
+        this.onPinChangedListener = onPinChangedListener
+        textWatcherArrayList.forEach {
+            it.setOnPinChangedListener(this.onPinChangedListener)
+        }
     }
 }

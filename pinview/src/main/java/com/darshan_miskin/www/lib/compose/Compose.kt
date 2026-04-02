@@ -43,7 +43,7 @@ fun PinView(
             )
             val pinView = PinView(themedContext)
             pinView.setOnPinCompletionListener(onPinCompletionListener)
-            pinView.setOnPinChanged {
+            pinView.setOnPinChangedListener {
                 onValueChange(pinView.text)
             }
             pinView
