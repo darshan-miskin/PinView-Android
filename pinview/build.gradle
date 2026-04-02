@@ -48,6 +48,7 @@ android {
     }
     kotlinOptions {
         jvmTarget = '17'
+        freeCompilerArgs += ["-Xmx2g"]
     }
 }
 
