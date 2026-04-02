@@ -1,11 +1,22 @@
-# PinView-Android
+# Android PinView / OTP-View
 [![](https://jitpack.io/v/darshan-miskin/PinView-Android.svg)](https://jitpack.io/#darshan-miskin/PinView-Android)
+
+### This isn't just an OTPView. This is also a PinView!
+- A goto library for otp handling as well has pin input handling
+- Compatible with Kotlin
+- Compatible with Compose
+- Compatible with Java
+- And also compatible with XML
+#### **Most importantly**, unlike other otp views, this one allows the user to 'paste' the otp from the clipboard!
+
+No matter if it's a legacy project or the latest one. This single library has got you covered!
+<br></br>
 
 <!--![alt text](https://github.com/darshan-miskin/PinView-Android/blob/master/imgs/GIF_1559495949954.gif?&v=1024&s=576)
 ![alt text](https://github.com/darshan-miskin/PinView-Android/blob/master/imgs/GIF_1559496256548.gif?&=1024×576)-->
 <img src="https://raw.githubusercontent.com/darshan-miskin/storage/master/GIF_1559739241294.gif" width="250" height="500">  <img src="https://raw.githubusercontent.com/darshan-miskin/storage/master/GIF_1559739158795.gif" width="250" height="500">
 
-# Gradle Dependency 
+# Gradle Dependency
 Add the following in your root build.gradle at the end of repositories:
 
 	allprojects {
@@ -14,26 +25,75 @@ Add the following in your root build.gradle at the end of repositories:
 			maven { url 'https://jitpack.io' }
 		}
 	}
- 
- Add this in your module's build.gradle 
- 
+
+Add this in your module's build.gradle
+
 	dependencies {
 	    implementation 'com.github.darshan-miskin:PinView-Android:v1.1.9'
 	}
-  
-  # Features
-  - Supports Paste via clipboard flawlessly.
-  - Password toggle to hide/show text on the go.
-  - Easy getText() and setText() methods like a regular EditText.
-  - Listener to detect when the pin is completely entered.
-  - Customizable pin background, textsize and pinsize.
-  - Customizable toggle tint/color and size.
-  - Flag to set password input type. 
-  
-  # Usage
-  
-  XML:
-  
+
+# Features
+- Supports Paste via clipboard flawlessly.
+- Password toggle to hide/show text on the go.
+- Easy getText() and setText() methods like a regular EditText.
+- Listener to detect when the pin is completely entered.
+- Customizable pin background, textsize and pinsize.
+- Customizable toggle tint/color and size.
+- Flag to set password input type.
+
+# Usage
+
+Jetpack Compose:
+
+    PinView(
+        modifier = modifier,
+        pinCount = 5,                                                                     //set total number of pins
+        text = "1234",                                                                    //set text for the pinview
+        pinBackground = ContextCompat.getDrawable(context, R.drawable.pin_background),    //pin style
+        isPassword = true,                                                                //password flag. If true dotted format will be visible
+        onValueChange = {                                                                 //get text from pinview
+            Toast.makeText(context, "pin value: $it", Toast.LENGTH_SHORT).show()
+            Log.d("asdf", "pin value: $it")
+        },
+        pinSize = 40.dp,                                                                  //set size of pin
+        inputType = InputType.NUMBER,                                                     //or InputType.NUMBER
+        showPasswordToggle = true,                                                        //make the password toggle visible
+        passwordToggleColor = Color.Blue,                                                 //set toggle drawable tint/color
+        pinTextSize = 20.sp,                                                              //set pin text size
+        passwordToggleSize = 40.dp,                                                       //set password toggle size
+        pinTextColor = Color.LightGray,                                                   //set text color of the pins
+    ) { entirePin ->
+        Toast.makeText(context, "Entire pin is: $entirePin", Toast.LENGTH_LONG).show()
+        focusManager.clearFocus()
+        keyboard?.hide()
+    }
+
+Kotlin:
+
+        pinView.pinCount = 4
+        pinView.text = "hello!!"
+        pinView.pinBackground = ContextCompat.getDrawable(this,R.drawable.pin_background)
+        pinView.isPassword = false
+        pinView.text
+        pinView.pinSizeDp = 40
+        pinView.inputType = InputType.TEXT
+        pinView.showPasswordToggle = true
+        pinView.passwordToggleColor = ContextCompat.getColor(this, R.color.colorPrimary)
+        pinView.pinTextSizeSp = 25f
+        pinView.passwordToggleSizeDp = 30
+        pinView.pinTextColor = ContextCompat.getColor(this, R.color.colorPrimary)
+
+        pinView.setOnPinChangedListener {
+            Log.d("asdf", "Pin Changed to: ${pinView.text}")
+        }
+
+        pinView.setOnPinCompletionListener { entirePin ->
+            Toast.makeText(this@MainActivity, "Entire pin is: $entirePin", Toast.LENGTH_LONG).show()
+            hideKeyboard()
+        }
+
+XML:
+
     <com.darshan_miskin.www.lib.PinView
         android:id="@+id/pinview"
         android:layout_width="match_parent"
@@ -41,44 +101,43 @@ Add the following in your root build.gradle at the end of repositories:
         app:textColor="@color/colorAccent"
         app:pinCount="5"
         app:inputType="number"
-        app:isPassword="false"
-        app:showPasswordToggle="true"
+        app:isPassword="true"
         app:pinBackground="@drawable/pin_background"
         app:pinSize="30dp"
         app:passwordToggleSize="26dp"
         app:passwordToggleColor="@color/colorAccent"
-        app:pinText="Hello"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
-        
-  Java: 
+
+Java:
+
+        pinView.setPinCount((short) 6);                                 
+        pinView.setText("hello!");                                      
+        pinView.setPinBackground(                                       
+            ContextCompat.getDrawable(this, R.drawable.pin_background)
+        );
+        pinView.setPassword(false);                                     
+        pinView.getText();                                              
+        pinView.setPinSizeDp(40);                                       
+        pinView.setInputType(InputType.TEXT);                           
+        pinView.setShowPasswordToggle(true);                            
+        pinView.setPasswordToggleColor(                                 
+            ContextCompat.getColor(this, R.color.colorPrimary)
+        );
+        pinView.setPinTextSizeSp(23);                                   
+        pinView.setPasswordToggleSizeDp(40);                            
+        pinView.setPinTextColor(                                        
+            ContextCompat.getColor(this, R.color.colorPrimary)
+        );
+
+        pinView.setOnPinChangedListener(() ->
+            Log.d("asdf", "Pin Changed to: "+pinView.getText())
+        );
+        pinView.setOnPinCompletionListener(entirePin ->
+            Toast.makeText(MainActivityJava.this,"Entire pin is: "+entirePin,Toast.LENGTH_LONG).show()
+        );
 
 
-        PinView pinView=findViewById(R.id.pinview);
-        
-        pinView.setPinCount(6);                      //set total number of pins
-        pinView.setText("helllooo");                 //set text for the pinview
-        pinView.setPinBackground(getResources().getDrawable(R.drawable.pin_background));  //pin style
-        pinView.setPassword(false);                  //password flag. If true dotted format will be visible
-        pinView.getText();                           //get text from pinview
-        pinView.setPinSize(40);                      //set size of pin in dp
-        pinView.setInputType(InputType.TYPE_TEXT);   // or InputType.TYPE_NUMBER
-        pinView.setShowPasswordToggle(true);         //make the password toggle visible
-        pinView.requestPinFocus();                   //request focus at zeroth position pin
-        pinView.requestPinFocus(4);                  //request focus on pin at 4th index, defaults to zeroth if invalid index
-        pinView.setPasswordToggleColor(getResources().getColor(R.color.colorPrimary)); //set toggle drawable tint/color
-        pinView.setPinTextSize(23);                  //set pin text size in sp
-        pinView.setPasswordToggleSize(20);           //set password toggle size in dp
-	    pinView.setTextColor(getResources().getColor(R.color.colorPrimary));  
-        
-        pinView.setOnPinCompletionListener(new OnPinCompletedListener() {
-            @Override
-            public void onPinCompleted(String entirePin) {
-                Toast.makeText(MainActivity.this,"Text Entered",Toast.LENGTH_LONG).show();
-            }
-        });
-	
-	
 # License
 
     MIT License
