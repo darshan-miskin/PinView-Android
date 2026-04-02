@@ -3,11 +3,14 @@ package com.darshan_miskin.www.lib
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.EditText
-import com.darshan_miskin.www.lib.PinView.Companion.onPinCompleted
-import com.darshan_miskin.www.lib.PinView.Companion.onPinChanged
 
 
-internal class PinTextWatcher(private val currentIndex: Int, pinEditTexts: ArrayList<EditText>) :
+internal class PinTextWatcher(
+    private val onPinChanged: () -> Unit,
+    private val onPinCompleted: (pin: String) -> Unit,
+    private val currentIndex: Int,
+    pinEditTexts: ArrayList<EditText>
+) :
     TextWatcher {
     private var isFirst = false
     private var isLast = false
@@ -54,7 +57,7 @@ internal class PinTextWatcher(private val currentIndex: Int, pinEditTexts: Array
         }
 
         if (this.isAllEditTextsFilled && !isProcessing) {
-            onPinCompleted?.invoke(entirePin)
+            onPinCompleted.invoke(entirePin)
         }
     }
 

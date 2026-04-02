@@ -18,12 +18,19 @@ import com.darshan_miskin.darshan_miskin.pinview.R
 import kotlin.math.roundToInt
 
 class PinView : LinearLayoutCompat {
+
+    internal companion object {
+        internal const val DEFAULT_PIN_TEXT_SIZE = 23f
+        internal const val DEFAULT_PIN_COUNT: Short = 4
+    }
+
     private val context: Context
     private var pinText: String = ""
     private var isToggleAdded = false
-    private var background: Drawable? = null
     internal val editTextsArrayList = ArrayList<EditText>()
     internal val textWatcherArrayList = ArrayList<PinTextWatcher>()
+    internal var onPinCompleted: (entirePin: String) -> Unit = {}
+    internal var onPinChanged: () -> Unit = {}
 
     constructor(context: Context) : super(context) {
         this.context = context
@@ -53,6 +60,76 @@ class PinView : LinearLayoutCompat {
         setStyleAndPins(attrs)
     }
 
+    private fun setStyleAndPins(attrs: AttributeSet?) {
+        context.withStyledAttributes(attrs, R.styleable.PinView) {
+            pinCount = getInteger(R.styleable.PinView_pinCount, DEFAULT_PIN_COUNT.toInt()).toShort()
+            inputType =
+                InputType.entries.toTypedArray()[getInteger(
+                    R.styleable.PinView_inputType,
+                    InputType.TEXT.id.toInt()
+                )]
+            isPassword = getBoolean(R.styleable.PinView_isPassword, false)
+            showPasswordToggle = getBoolean(R.styleable.PinView_showPasswordToggle, false)
+            pinSizeDp = getDimensionPixelSize(R.styleable.PinView_pinSize, pinSizeDp)
+
+            pinText = getString(R.styleable.PinView_pinText).toString()
+            pinTextSizeSp = getDimension(R.styleable.PinView_pinTextSize, DEFAULT_PIN_TEXT_SIZE)
+            passwordToggleSizeDp =
+                getDimensionPixelSize(R.styleable.PinView_passwordToggleSize, passwordToggleSizeDp)
+            passwordToggleColor =
+                getColor(R.styleable.PinView_passwordToggleColor, passwordToggleColor)
+            pinTextColor = getColor(R.styleable.PinView_textColor, pinTextColor)
+
+//            pinCursorColor =a.getColor(R.styleable.PinView_cursorColor,pinCursorColor);
+            if (hasValue(R.styleable.PinView_pinBackground)) {
+                pinBackground = getDrawable(R.styleable.PinView_pinBackground)
+            }
+        }
+
+        addPins()
+    }
+
+    private fun addPins() {
+        this.removeAllViews()
+        editTextsArrayList.clear()
+        for (i in 0..<this.pinCount) {
+            val editText = EditText(context)
+            editText.setGravity(Gravity.CENTER)
+            val layoutParams = LayoutParams(pinSizeDp, pinSizeDp /*,1*/)
+            layoutParams.setMargins(
+                resources.getDimensionPixelSize(R.dimen.margin_pin_edit_text),
+                resources.getDimensionPixelSize(R.dimen.margin_pin_edit_text),
+                resources.getDimensionPixelSize(R.dimen.margin_pin_edit_text),
+                resources.getDimensionPixelSize(R.dimen.margin_pin_edit_text)
+            )
+            editText.setLayoutParams(layoutParams)
+            editText.textSize = pinTextSizeSp
+            editText.setTextColor(pinTextColor)
+//            setCursorColor(editText,pinCursorColor);
+            editText.setMaxLines(1)
+            editText.setLines(1)
+            editText.setPadding(0, 0, 0, 0)
+            editText.setFilters(arrayOf(LengthFilter(1), AllCaps()))
+            if (pinBackground != null) editText.background = pinBackground
+            setPasswordType(editText)
+            editTextsArrayList.add(editText)
+            this.addView(editText)
+        }
+        textWatcherArrayList.clear()
+        for (i in 0..<this.pinCount) {
+            val pinTextWatcher = PinTextWatcher(onPinChanged, onPinCompleted, i, editTextsArrayList)
+            textWatcherArrayList.add(pinTextWatcher)
+            editTextsArrayList[i].addTextChangedListener(pinTextWatcher)
+            editTextsArrayList[i].setOnKeyListener(PinOnKeyListener(i, editTextsArrayList))
+        }
+        isToggleAdded = false
+
+        if (!isInEditMode) this.text = pinText
+        showPasswordToggle = showPasswordToggle
+
+//        requestPinFocus();
+    }
+
     /**
      * Color/Tint to be applied to the toggle view
      * <br></br> Default is black.
@@ -80,6 +157,7 @@ class PinView : LinearLayoutCompat {
                 editTextsArrayList[i].setTextColor(pinTextColor)
             }
         }
+
     /**
      * Size of the toggle view
      * @param passwordToggleSizeDp size in dp
@@ -88,7 +166,6 @@ class PinView : LinearLayoutCompat {
         set(value) {
             field = value
             if (isToggleAdded) {
-//                val height = (value - (value * .10)).roundToInt()
                 val layoutParams = LayoutParams(
                     convertDpToPixel(value.toFloat(), context),
                     convertDpToPixel(value.toFloat(), context),
@@ -105,7 +182,7 @@ class PinView : LinearLayoutCompat {
         }
 
     /**
-     * Textsize of the pins
+     * Text size of the pins
      * @param pinTextSizeSp size in sp
      */
     var pinTextSizeSp = DEFAULT_PIN_TEXT_SIZE
@@ -116,7 +193,6 @@ class PinView : LinearLayoutCompat {
             }
         }
 
-    //    private int pinCursorColor =getResources().getColor(android.R.color.holo_orange_dark);
     /**
      * Specify if the pinview is of the type password.
      * <br></br> Default is false
@@ -135,7 +211,7 @@ class PinView : LinearLayoutCompat {
 //                        editTextsArrayList[i].setInputType(android.text.InputType.TYPE_CLASS_TEXT or android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD)
 //                }
 //            } else {
-                this.inputType = inputType
+            this.inputType = inputType
 //            }
 
             if (isToggleAdded) {
@@ -148,7 +224,6 @@ class PinView : LinearLayoutCompat {
                     drawable.setColorFilter(passwordToggleColor, PorterDuff.Mode.SRC_IN)
                     editTextsArrayList[editTextsArrayList.size - 1].background = drawable
                 }
-//                field = !field
             }
             textWatcherArrayList[this.pinCount - 1].setProcessing(false)
         }
@@ -174,7 +249,6 @@ class PinView : LinearLayoutCompat {
                 val drawable = resources.getDrawable(R.drawable.ic_show)
                 drawable.setColorFilter(passwordToggleColor, PorterDuff.Mode.SRC_IN)
                 editText.background = drawable
-//                val height = (passwordToggleSize - (passwordToggleSize * .10)).roundToInt()
                 val layoutParams = LayoutParams(
                     passwordToggleSizeDp,
                     passwordToggleSizeDp /*,1*/
@@ -193,21 +267,19 @@ class PinView : LinearLayoutCompat {
                     editTextsArrayList[this.pinCount.toInt()]
                         .setOnClickListener {
                             textWatcherArrayList[0].setProcessing(true)
-//                            for (i in 0..<this@PinView.pinCount) {
-//                                setPasswordType(editTextsArrayList[i])
-//                            }
                             this.isPassword = !this.isPassword
                             textWatcherArrayList[this@PinView.pinCount - 1].setProcessing(false)
                             if (isPassword) {
                                 val drawable = resources.getDrawable(R.drawable.ic_show)
                                 drawable.setColorFilter(passwordToggleColor, PorterDuff.Mode.SRC_IN)
-                                editTextsArrayList[editTextsArrayList.size - 1].background = drawable
+                                editTextsArrayList[editTextsArrayList.size - 1].background =
+                                    drawable
                             } else {
                                 val drawable = resources.getDrawable(R.drawable.ic_hide)
                                 drawable.setColorFilter(passwordToggleColor, PorterDuff.Mode.SRC_IN)
-                                editTextsArrayList[editTextsArrayList.size - 1].background = drawable
+                                editTextsArrayList[editTextsArrayList.size - 1].background =
+                                    drawable
                             }
-//                            isPassword = !isPassword
                         }
                     this.addView(editText)
                     isToggleAdded = true
@@ -277,32 +349,6 @@ class PinView : LinearLayoutCompat {
             }
         }
 
-    private fun setStyleAndPins(attrs: AttributeSet?) {
-        context.withStyledAttributes(attrs, R.styleable.PinView) {
-            pinCount = getInteger(R.styleable.PinView_pinCount, DEFAULT_PIN_COUNT.toInt()).toShort()
-            inputType =
-                InputType.entries.toTypedArray()[getInteger(R.styleable.PinView_inputType, InputType.TEXT.id.toInt())]
-            isPassword = getBoolean(R.styleable.PinView_isPassword, false)
-            showPasswordToggle = getBoolean(R.styleable.PinView_showPasswordToggle, false)
-            pinSizeDp = getDimensionPixelSize(R.styleable.PinView_pinSize, pinSizeDp)
-
-            pinText = getString(R.styleable.PinView_pinText).toString()
-            pinTextSizeSp = getDimension(R.styleable.PinView_pinTextSize, DEFAULT_PIN_TEXT_SIZE)
-            passwordToggleSizeDp =
-                getDimensionPixelSize(R.styleable.PinView_passwordToggleSize, passwordToggleSizeDp)
-            passwordToggleColor =
-                getColor(R.styleable.PinView_passwordToggleColor, passwordToggleColor)
-            pinTextColor = getColor(R.styleable.PinView_textColor, pinTextColor)
-
-            //        pinCursorColor =a.getColor(R.styleable.PinView_cursorColor,pinCursorColor);
-            if (hasValue(R.styleable.PinView_pinBackground)) {
-                background = getDrawable(R.styleable.PinView_pinBackground)
-            }
-        }
-
-        addPins()
-    }
-
     override fun onCreateContextMenu(menu: ContextMenu) {
         super.onCreateContextMenu(menu)
 
@@ -314,47 +360,6 @@ class PinView : LinearLayoutCompat {
                 this@PinView.text = text
                 true
             }
-    }
-
-    private fun addPins() {
-        this.removeAllViews()
-        editTextsArrayList.clear()
-        for (i in 0..<this.pinCount) {
-            val editText = EditText(context)
-            editText.setGravity(Gravity.CENTER)
-            val layoutParams = LayoutParams(pinSizeDp, pinSizeDp /*,1*/)
-            layoutParams.setMargins(
-                resources.getDimensionPixelSize(R.dimen.margin_pin_edit_text),
-                resources.getDimensionPixelSize(R.dimen.margin_pin_edit_text),
-                resources.getDimensionPixelSize(R.dimen.margin_pin_edit_text),
-                resources.getDimensionPixelSize(R.dimen.margin_pin_edit_text)
-            )
-            editText.setLayoutParams(layoutParams)
-            editText.textSize = pinTextSizeSp
-            editText.setTextColor(pinTextColor)
-            //            setCursorColor(editText,pinCursorColor);
-            editText.setMaxLines(1)
-            editText.setLines(1)
-            editText.setPadding(0, 0, 0, 0)
-            editText.setFilters(arrayOf(LengthFilter(1), AllCaps()))
-            if (background != null) editText.background = background
-            setPasswordType(editText)
-            editTextsArrayList.add(editText)
-            this.addView(editText)
-        }
-        textWatcherArrayList.clear()
-        for (i in 0..<this.pinCount) {
-            val pinTextWatcher = PinTextWatcher(i, editTextsArrayList)
-            textWatcherArrayList.add(pinTextWatcher)
-            editTextsArrayList[i].addTextChangedListener(pinTextWatcher)
-            editTextsArrayList[i].setOnKeyListener(PinOnKeyListener(i, editTextsArrayList))
-        }
-        isToggleAdded = false
-
-        if (!isInEditMode) this.text = pinText
-        showPasswordToggle = showPasswordToggle
-
-        //        requestPinFocus();
     }
 
     private fun setPasswordType(editText: EditText) {
@@ -401,35 +406,30 @@ class PinView : LinearLayoutCompat {
      * <br></br> Default is null
      * @param backgroundDrawable Drawable to use as the background
      */
-    fun setPinBackground(backgroundDrawable: Drawable?) {
-        background = backgroundDrawable
-        for (i in 0..<this.pinCount) {
-            editTextsArrayList[i].background = background
+    var pinBackground: Drawable? = null
+        set(value) {
+            field = value
+            for (i in 0..<this.pinCount) {
+                editTextsArrayList[i].background = pinBackground
+            }
         }
-    }
-
-    /**
-     * Set a listener to detect when all the pins are filled
-     * @param onPinCompletionListener instance of OnPinCompletionListener
-     */
-    fun setOnPinCompletionListener(onPinCompleted: (entirePin: String) -> Unit) {
-        Companion.onPinCompleted = onPinCompleted
-    }
 
     private fun convertDpToPixel(dp: Float, context: Context): Int {
         return (dp * (context.resources
             .displayMetrics.densityDpi.toFloat() / DisplayMetrics.DENSITY_DEFAULT)).roundToInt()
     }
 
-    /**
-     * Requests focus on the pin at index zero
-     */
-    fun requestPinFocus() {
-        editTextsArrayList[0].requestFocus()
-    }
+//    /**
+//     * Requests focus on the pin at index zero
+//     */
+//    fun requestPinFocus() {
+//        editTextsArrayList[0].requestFocus()
+//    }
 
     /**
-     * Request focus on the pin at specified index, if index is invalid defaults to zeroth pin
+     * Request focus on the pin at specified index.
+     *
+     * If index is invalid defaults to zero.
      * @param index index of the pin
      */
     fun requestPinFocusAt(index: Int) {
@@ -437,52 +437,56 @@ class PinView : LinearLayoutCompat {
         else editTextsArrayList[0].requestFocus()
     }
 
+//    private int pinCursorColor =getResources().getColor(android.R.color.holo_orange_dark);
+//    /**
+//     * Cursor color of the pins
+//     * @param cursorColor
+//     */
+//    public void setCursorColor(int cursorColor){
+//        pinCursorColor=cursorColor;
+//        for (int i=0; i<getPinCount(); i++){
+//            setCursorColor(editTextsArrayList.get(i),pinCursorColor);
+//        }
+//    }
+//
+//    private void setCursorColor(EditText view, @ColorInt int color) {
+//        try {
+//            // Get the cursor resource id
+//            Field field = TextView.class.getDeclaredField("mCursorDrawableRes");
+//            field.setAccessible(true);
+//            int drawableResId = field.getInt(view);
+//
+//            // Get the editor
+//            field = TextView.class.getDeclaredField("mEditor");
+//            field.setAccessible(true);
+//            Object editor = field.get(view);
+//
+//            // Get the drawable and set a color filter
+//            Drawable drawable = ContextCompat.getDrawable(view.getContext(), drawableResId);
+//            drawable.setColorFilter(color, PorterDuff.Mode.SRC_IN);
+//            Drawable[] drawables = {drawable, drawable};
+//
+//            // Set the drawables
+//            field = editor.getClass().getDeclaredField("mCursorDrawable");
+//            field.setAccessible(true);
+//            field.set(editor, drawables);
+//        } catch (Exception ignored) {
+//        }
+//    }
+
     /**
-     * Cursor color of the pins
-     * @param cursorColor
+     * Set a listener to get notified when all the pins are entered
+     * @param onPinCompleted is a lambda function of type (String) -> Unit
      */
-    //    public void setCursorColor(int cursorColor){
-    //        pinCursorColor=cursorColor;
-    //        for (int i=0; i<getPinCount(); i++){
-    //            setCursorColor(editTextsArrayList.get(i),pinCursorColor);
-    //        }
-    //    }
-
-    //    private void setCursorColor(EditText view, @ColorInt int color) {
-    //        try {
-    //            // Get the cursor resource id
-    //            Field field = TextView.class.getDeclaredField("mCursorDrawableRes");
-    //            field.setAccessible(true);
-    //            int drawableResId = field.getInt(view);
-    //
-    //            // Get the editor
-    //            field = TextView.class.getDeclaredField("mEditor");
-    //            field.setAccessible(true);
-    //            Object editor = field.get(view);
-    //
-    //            // Get the drawable and set a color filter
-    //            Drawable drawable = ContextCompat.getDrawable(view.getContext(), drawableResId);
-    //            drawable.setColorFilter(color, PorterDuff.Mode.SRC_IN);
-    //            Drawable[] drawables = {drawable, drawable};
-    //
-    //            // Set the drawables
-    //            field = editor.getClass().getDeclaredField("mCursorDrawable");
-    //            field.setAccessible(true);
-    //            field.set(editor, drawables);
-    //        } catch (Exception ignored) {
-    //        }
-    //    }
-
-    fun setOnPinChanged(onPinChanged: () -> Unit){
-        Companion.onPinChanged = onPinChanged
+    fun setOnPinCompletionListener(onPinCompleted: (entirePin: String) -> Unit) {
+        this.onPinCompleted = onPinCompleted
     }
 
-    internal companion object {
-        @JvmStatic
-        internal var onPinCompleted: ((entirePin: String) -> Unit)? = null
-        @JvmStatic
-        internal lateinit var onPinChanged: () -> Unit
-        internal const val DEFAULT_PIN_TEXT_SIZE = 23f
-        internal const val DEFAULT_PIN_COUNT: Short = 4
+    /**
+     * Set a listener to get notified when the pin changes.
+     * @param onPinChanged is a lambda function of type () -> Unit
+     */
+    fun setOnPinChanged(onPinChanged: () -> Unit) {
+        this.onPinChanged = onPinChanged
     }
 }

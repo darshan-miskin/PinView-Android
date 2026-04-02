@@ -14,15 +14,15 @@ internal class PinOnKeyListener(private val currentIndex: Int, pinEditTexts: Arr
     }
 
     override fun onKey(v: View?, keyCode: Int, event: KeyEvent): Boolean {
-        if (keyCode == KeyEvent.KEYCODE_DEL && event.getAction() == KeyEvent.ACTION_DOWN) {
-            if (pinEditTexts.get(currentIndex)!!.getText().toString()
+        if (keyCode == KeyEvent.KEYCODE_DEL && event.action == KeyEvent.ACTION_DOWN) {
+            if (pinEditTexts[currentIndex].getText().toString()
                     .isEmpty() && currentIndex != 0
             ) {
                 PinTextWatcher.isDeleting = true
-                pinEditTexts.get(currentIndex - 1)!!.setFocusable(true)
-                pinEditTexts.get(currentIndex - 1)!!.setFocusableInTouchMode(true)
-                pinEditTexts.get(currentIndex - 1)!!.setText("")
-                pinEditTexts.get(currentIndex - 1)!!.requestFocus()
+                pinEditTexts[currentIndex - 1].setFocusable(true)
+                pinEditTexts[currentIndex - 1].setFocusableInTouchMode(true)
+                pinEditTexts[currentIndex - 1].setText("")
+                pinEditTexts[currentIndex - 1].requestFocus()
             }
         }
         return false

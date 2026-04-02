@@ -1,5 +1,6 @@
 package com.darshan_miskin.www.lib.compose
 
+import android.graphics.drawable.Drawable
 import android.view.ContextThemeWrapper
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
@@ -18,17 +19,19 @@ import com.darshan_miskin.www.lib.PinView
 @Composable
 fun PinView(
     modifier: Modifier = Modifier,
-    text: String = "",
-    onValueChange: (String) -> Unit = {},
     pinCount: Short = PinView.DEFAULT_PIN_COUNT,
-    inputType: InputType = InputType.NUMBER,
+    text: String = "",
+    pinBackground: Drawable? = null,
     isPassword: Boolean = false,
-    showPasswordToggle: Boolean = false,
+    onValueChange: (String) -> Unit = {},
     pinSize: Dp = dimensionResource(R.dimen.pin_size),
+    inputType: InputType = InputType.NUMBER,
+    showPasswordToggle: Boolean = false,
+    requestFocus: Int = 0,
+    passwordToggleColor: Color = if (isSystemInDarkTheme()) Color.White else Color.Black,
     pinTextSize: TextUnit = TextUnit(PinView.DEFAULT_PIN_TEXT_SIZE, TextUnitType.Sp),
     passwordToggleSize: Dp = dimensionResource(R.dimen.password_toggle_size),
     pinTextColor: Color = if (isSystemInDarkTheme()) Color.White else Color.Black,
-    passwordToggleColor: Color = if (isSystemInDarkTheme()) Color.White else Color.Black,
     onPinCompletionListener: (String) -> Unit
 ) {
     val isDarkTheme = isSystemInDarkTheme()
@@ -51,6 +54,8 @@ fun PinView(
             it.inputType = inputType
             it.showPasswordToggle = showPasswordToggle
             it.isPassword = isPassword
+            it.pinBackground = pinBackground
+            it.requestPinFocusAt(requestFocus)
             it.passwordToggleColor = passwordToggleColor.toArgb()
             it.pinTextSizeSp = pinTextSize.value
             it.pinTextColor = pinTextColor.toArgb()

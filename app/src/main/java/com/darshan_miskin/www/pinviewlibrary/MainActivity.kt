@@ -17,26 +17,21 @@ class MainActivity : AppCompatActivity() {
 
         pinView.pinCount = 4
         pinView.text = "hello!!"
-//        pinView.setPinBackground(getResources().getDrawable(R.drawable.pin_background));
+        pinView.pinBackground = ContextCompat.getDrawable(this,R.drawable.pin_background)
+        pinView.isPassword = false
         pinView.text
-//        pinView.pinSizeDp = 40
+        pinView.pinSizeDp = 40
         pinView.inputType = InputType.TEXT
         pinView.showPasswordToggle = true
-        pinView.isPassword = false
-        pinView.requestPinFocus()
         pinView.requestPinFocusAt(4)
         pinView.passwordToggleColor = ContextCompat.getColor(this, R.color.colorPrimary)
-//        pinView.setPinSize(20);
         pinView.pinTextSizeSp = 13f
         pinView.passwordToggleSizeDp = 30
+        pinView.pinTextColor = ContextCompat.getColor(this, R.color.colorPrimary)
 
-
-//        pinView.setTextColor(getResources().getColor(R.color.colorPrimary));
         pinView.setOnPinCompletionListener { entirePin ->
-            Toast.makeText(this@MainActivity, "Text Entered: $entirePin", Toast.LENGTH_LONG).show()
+            Toast.makeText(this@MainActivity, "Entire pin is: $entirePin", Toast.LENGTH_LONG).show()
             hideKeyboard()
-//            pinView.setShowPasswordToggle(false);
-//            pinView.setInputType(InputType.TYPE_NUMBER);
         }
     }
 
