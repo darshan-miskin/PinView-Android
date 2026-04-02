@@ -1,0 +1,4 @@
+jdk:
+  - openjdk17
+before_install:
+  - export GRADLE_OPTS="-Xmx4096m -Xms512m -XX:MaxMetaspaceSize=512m -XX:+HeapDumpOnOutOfMemoryError -Dorg.gradle.jvmargs=\"-Xmx4096m\""

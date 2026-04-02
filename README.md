@@ -17,6 +17,47 @@ No matter if it's a legacy project or the latest one. This single library has go
 <img src="https://raw.githubusercontent.com/darshan-miskin/storage/master/GIF_1559739241294.gif" width="250" height="500">  <img src="https://raw.githubusercontent.com/darshan-miskin/storage/master/GIF_1559739158795.gif" width="250" height="500">
 
 # Gradle Dependency
+
+### 1) Gradle 7.0+
+
+#### a) Groovy
+
+Add the following in your root settings.gradle at the end of repositories:
+
+    dependencyResolutionManagement {
+		repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+		repositories {
+			mavenCentral()
+			maven { url 'https://jitpack.io' }
+		}
+	}
+
+Add this in your module's build.gradle
+
+	dependencies {
+	        implementation 'com.github.darshan-miskin:Android-PinView-OtpView:Tag'
+	}
+
+#### b) Gradle.kts
+
+Add the following in your root settings.gradle.kts at the end of repositories:
+
+    dependencyResolutionManagement {
+		repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+		repositories {
+			mavenCentral()
+			maven { url = uri("https://jitpack.io") }
+		}
+	}
+
+Add this in your module's build.gradle
+
+    dependencies {
+	        implementation("com.github.darshan-miskin:Android-PinView-OtpView:Tag")
+	}
+
+### 2) Older Gradle versions
+
 Add the following in your root build.gradle at the end of repositories:
 
 	allprojects {
