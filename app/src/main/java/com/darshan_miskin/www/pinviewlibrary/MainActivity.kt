@@ -24,9 +24,8 @@ class MainActivity : AppCompatActivity() {
         pinView.pinSizeDp = 40
         pinView.inputType = InputType.TEXT
         pinView.showPasswordToggle = true
-        pinView.requestPinFocusAt(4)
         pinView.passwordToggleColor = ContextCompat.getColor(this, R.color.colorPrimary)
-        pinView.pinTextSizeSp = 13f
+        pinView.pinTextSizeSp = 25f
         pinView.passwordToggleSizeDp = 30
         pinView.pinTextColor = ContextCompat.getColor(this, R.color.colorPrimary)
 

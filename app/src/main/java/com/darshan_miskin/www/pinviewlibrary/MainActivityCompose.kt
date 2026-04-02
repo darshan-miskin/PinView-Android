@@ -56,13 +56,12 @@ fun Greeting(modifier: Modifier = Modifier) {
         pinBackground = ContextCompat.getDrawable(context, R.drawable.pin_background),
         isPassword = true,
         onValueChange = {
-            Toast.makeText(context, "pin value: $it", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, "pin value: $it", Toast.LENGTH_SHORT).show()
             Log.d("asdf", "pin value: $it")
         },
         pinSize = 40.dp,
         inputType = InputType.NUMBER,
         showPasswordToggle = true,
-        requestFocus = 2,
         passwordToggleColor = Color.Blue,
         pinTextSize = 20.sp,
         passwordToggleSize = 40.dp,

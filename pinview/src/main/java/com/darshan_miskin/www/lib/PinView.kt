@@ -193,7 +193,6 @@ class PinView : LinearLayoutCompat {
      *
      * Setting a value to this variable is independent of [showPasswordToggle]. However, setting a value to [showPasswordToggle] updates this variable.
      *
-     * @param isPassword either true or false
      */
     var isPassword = false
         set(value) {
@@ -229,8 +228,6 @@ class PinView : LinearLayoutCompat {
      * Enable or disable password toggle. Default value is false.
      *
      * Enabling this, simultaneously also enables [isPassword]
-     *
-     * @param showPasswordToggle boolean value
      */
     var showPasswordToggle = false
         set(value) {
@@ -377,7 +374,8 @@ class PinView : LinearLayoutCompat {
                 val clipboardManager =
                     context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                 val text: CharSequence? = clipboardManager.primaryClip?.getItemAt(0)?.text
-                if(text!=null && text.trim().isNotEmpty()) this@PinView.text = text.toString()
+                if(text==null || text.trim().isEmpty()) return@setOnMenuItemClickListener false
+                this@PinView.text = text.toString()
                 true
             }
     }
@@ -443,16 +441,16 @@ class PinView : LinearLayoutCompat {
 //        editTextsArrayList[0].requestFocus()
 //    }
 
-    /**
-     * Request focus on the pin at specified index.
-     *
-     * If index is invalid defaults to zero.
-     * @param index index of the pin
-     */
-    fun requestPinFocusAt(index: Int) {
-        if (index > 0 && index < this.pinCount) editTextsArrayList[index].requestFocus()
-        else editTextsArrayList[0].requestFocus()
-    }
+//    /**
+//     * Request focus on the pin at specified index.
+//     *
+//     * If index is invalid, defaults to zero.
+//     * @param index index of the pin
+//     */
+//    fun requestPinFocusAt(index: Int) {
+//        if (index > 0 && index < this.pinCount) editTextsArrayList[index].requestFocus()
+//        else editTextsArrayList[0].requestFocus()
+//    }
 
 //    private int pinCursorColor =getResources().getColor(android.R.color.holo_orange_dark);
 //    /**

@@ -20,7 +20,7 @@ public class MainActivityJava extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_main_java);
+        setContentView(R.layout.activity_main);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -39,7 +39,6 @@ public class MainActivityJava extends AppCompatActivity {
         pinView.setPinSizeDp(40);                                       //set size of pin in dp
         pinView.setInputType(InputType.TEXT);                           // or InputType.NUMBER
         pinView.setShowPasswordToggle(true);                            //make the password toggle visible
-        pinView.requestPinFocusAt(4);                                   //request focus on pin at 4th index, defaults to zeroth if invalid index
         pinView.setPasswordToggleColor(                                 //set toggle drawable tint/color
             ContextCompat.getColor(this, R.color.colorPrimary)
         );
