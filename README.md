@@ -2,7 +2,7 @@
 [![](https://jitpack.io/v/darshan-miskin/PinView-Android.svg)](https://jitpack.io/#darshan-miskin/PinView-Android)
 
 ### This isn't just an OTPView. This is also a PinView!
-- A goto library for otp handling as well has pin input handling
+- A goto library for otp handling as well has pin input
 - Compatible with Kotlin
 - Compatible with Compose
 - Compatible with Java
