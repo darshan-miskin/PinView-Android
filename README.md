@@ -35,7 +35,7 @@ Add the following in your root settings.gradle at the end of repositories:
 Add this in your module's build.gradle
 
 	dependencies {
-	        implementation 'com.github.darshan-miskin:Android-PinView-OtpView:Tag'
+	        implementation 'com.github.darshan-miskin:Android-PinView-OtpView:v2.0'
 	}
 
 #### b) Gradle.kts
@@ -53,7 +53,7 @@ Add the following in your root settings.gradle.kts at the end of repositories:
 Add this in your module's build.gradle
 
     dependencies {
-	        implementation("com.github.darshan-miskin:Android-PinView-OtpView:Tag")
+	        implementation("com.github.darshan-miskin:Android-PinView-OtpView:v2.0")
 	}
 
 ### 2) Older Gradle versions
@@ -70,7 +70,7 @@ Add the following in your root build.gradle at the end of repositories:
 Add this in your module's build.gradle
 
 	dependencies {
-	    implementation 'com.github.darshan-miskin:PinView-Android:v1.1.9'
+	    implementation 'com.github.darshan-miskin:PinView-Android:v2.0'
 	}
 
 # Features
